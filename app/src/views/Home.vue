@@ -1,18 +1,115 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <div class="button" @click="addCard()">
+      Card
+    </div>
+    <div class="hand">
+      <template v-for="(card, index) in cards">
+        <Card :image='card.image' :cardId="index" :key="index" @mousedown="mouseIsPressed()"></Card>
+      </template>
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import axios from 'axios'
+import Card from '../components/Card.vue'
+// import cardsJson from '../AllSets.json'
+// https://img.scryfall.com/cards/png/en/exp/43.png?1517813031
+// console.log(cardsJson);
+// console.log(cardsJson[2]);
+
+// var randomProperty = function (obj) {
+//     var keys = Object.keys(obj)
+//     return obj[keys[ keys.length * Math.random() << 0]];
+// };
 
 export default {
-  name: 'home',
+  name: 'app',
+  data () {
+    return {
+      cards: []
+    }
+  },
   components: {
-    HelloWorld
+    Card
+  },
+  methods: {
+    addCard () {
+      axios.get('http://localhost:3000/getRandomCard')
+        .then(res => {
+          console.log(res)
+          this.cards.push({ image: res.data })
+        })
+        .catch(error => console.log(error))
+    },
+    mouseIsPressed () {
+      console.log('we pressing!')
+    }
   }
 }
 </script>
+
+<style>
+* {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+body {
+  margin: 0px;
+  padding: 0px;
+  background-color: ghostwhite;
+  overflow-y: hidden;
+}
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+}
+.hand {
+  position: absolute;
+  /* bottom: -136px; */
+  /* background-color: aquamarine; */
+  width: 100%;
+  display: inline-block;
+  margin: auto;
+  text-align: center;
+  bottom: 0px;
+  /* margin: 0px 200px; */
+  /* padding: 0px 300px; */
+  /* height: 400px; */
+  /* You could make a script that repositions hand according to mouse position */
+  /* In mobile, remove hand, place it on the side */
+  /* overflow-x: scroll; */
+  /* height: 500px; */
+  /* width: max-content; */
+  /* padding: 0px 100px; */
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+.button {
+  width: 100px;
+  height: 50px;
+  background-color: dodgerblue;
+  text-align: center;
+  line-height: 50px;
+  font-weight: bold;
+  border-radius: 5px;
+  color: white;
+  /* border-bottom: 5px solid dodgerblue; */
+  transition: background-color .15s ease-in-out;
+  margin: auto;
+  margin-top: 300px;
+  cursor: pointer;
+}
+.button:hover {
+  background-color: lightgreen;
+}
+</style>
