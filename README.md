@@ -1,7 +1,7 @@
 # MtgVue
-Magic the Gathering app using VueJS + NodeJS
+Magic the Gathering within a browser
 
-Here are some examples of what I got so far
+Project just started, here are some prototype of what I got so far
 ![](hovering.gif)
 
 ![](dragging.gif)
