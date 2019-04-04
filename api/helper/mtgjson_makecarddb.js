@@ -1,5 +1,6 @@
 var fs = require('fs');
 var mongoose = require('mongoose');
+var CardSchema = require('../Schemas/Card');
 
 mongoose.connect('mongodb://localhost/mtgdb', {useNewUrlParser: true});
 
@@ -8,47 +9,9 @@ const mtgjson_file = process.argv[2]
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-    var cardSchema = new mongoose.Schema({
-        artist: String,
-        borderColor: String,
-        colorIdentity: Array,
-        colors: Array,
-        convertedManaCost: Number,
-        flavorText: String,
-        foreignData: Array,
-        frameVersion: String,
-        hasFoil: Boolean,
-        hasNonFoil: Boolean,
-        layout: String,
-        legalities: Object,
-        manaCost: String,
-        multiverseId: Number,
-        name: String,
-        number: String,
-        originalText: String,
-        originalType: String,
-        power: String,
-        printings: Array,
-        rarity: String,
-        rulings: Array,
-        scryfallId: String,
-        scryfallIllustrationId: String,
-        scryfallOracleId: String,
-        subtypes: Array,
-        supertypes: Array,
-        tcgplayerProductId: Number,
-        tcgplayerPurchaseUrl: String,
-        text: String,
-        toughness: String,
-        type: String,
-        types: Array,
-        uuid: String,
-        uuidV421: String,
-        core_imageLink: Array
-    }, { collection: 'cards' });
 
     // Making model using the schema
-    var Card = mongoose.model('Card', cardSchema);
+    var Card = mongoose.model('Card', CardSchema);
 
     // Fetching all cards
     fs.readFile(mtgjson_file, (err, mtgdata) => {
@@ -63,41 +26,17 @@ db.once('open', function() {
 
             for (var i = 0; i < mtgjson[key].cards.length; i++) {
                 var card = new Card(mtgjson[key].cards[i]);
+                card.core_fallbackLinks[0] = "https://img.scryfall.com/cards/large/en/" + key.toLowerCase() +"/" + mtgjson[key].cards[i].number + ".jpg";
+                card.core_fallbackLinks[1] = "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=" + mtgjson[key].cards[i].multiverseId + "&type=card";
+                card.core_set = key.toLowerCase();
                 card.save(function (err, card) {
                     if (err) return console.error(err);
                 });
             }
         }
+        console.log("Done!");
     });
 });
-
-return false;
-
-// fs.readFile(mtgjson_file, function (err, mtgdata) {
-//     if (err) {
-//         throw err; 
-//     }
-
-//     var mtgjson = JSON.parse(mtgdata.toString());
-    
-//     // Creating new temporary folder to store each set as a individual json objecty
-//     var dir = './tmp';
-//     if (!fs.existsSync(dir)) {
-//         fs.mkdirSync(dir);
-//     } 
-
-//     for (var key in mtgjson) {
-//         console.log(key);
-//         var json = JSON.stringify(mtgjson[key]);
-//         fs.writeFile('./tmp/' + key + '.json', json, 'utf8', (err) => {
-//             if (err) throw err;
-
-//         })
-//     }
-//     // console.log(mtgjson.length);
-    
-    
-// });
 
 // Use this in another file (it imports all sets to mongodb)
 // exec('/c/Program Files/MongoDB/Server/4.0/bin/mongoimport.exe --db mtgdb --collection allset --file ~/Documents/labs/mtgvue/api/helper/tmp/' + key + '.json', (err, stdout, stderr) => {

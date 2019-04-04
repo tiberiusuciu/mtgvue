@@ -5,7 +5,7 @@
     </div>
     <div class="hand">
       <template v-for="(card, index) in cards">
-        <Card :image='card.image' :cardId="index" :key="index" @mousedown="mouseIsPressed()"></Card>
+        <Card :card='card' :cardId="index" :key="index" @mousedown="mouseIsPressed()"></Card>
       </template>
     </div>
   </div>
@@ -39,7 +39,7 @@ export default {
       axios.get('http://localhost:3000/getRandomCard')
         .then(res => {
           console.log(res)
-          this.cards.push({ image: res.data })
+          this.cards.push(res.data)
         })
         .catch(error => console.log(error))
     },
