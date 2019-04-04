@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
     <div class="button" @click="addCard()">
       Card
     </div>
@@ -13,7 +12,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Card from '../components/Card.vue'
 
 export default {
