@@ -1,6 +1,11 @@
 # MtgVue
 Magic the Gathering app using VueJS + NodeJS
 
+Here are some examples of what I got so far
+![](hovering.gif)
+
+![](dragging.gif)
+
 ### Purpose
 I want to synthesize the various technologies and methodologies that I have learned over the course of my professional and academic career. During my college days, I spent my breaks playing Magic the Gathering with friends and talked about the game. Due to its complexity, I figured I could use this game as my training grounds.
 
@@ -31,6 +36,7 @@ I want to synthesize the various technologies and methodologies that I have lear
   - [MongoDB](https://www.mongodb.com/) - NoSQL database
 - Other
   - [MTGJSON](https://mtgjson.com/) - JSON object of remotely anything involving MTG
+  - [Scryfall](https://scryfall.com/) - Great MTG website with HD image assets for the cards
 
 ### Run it locally
 You will need to have [MongoDB](https://www.mongodb.com/) installed on your computer
