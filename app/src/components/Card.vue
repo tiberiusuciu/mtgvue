@@ -38,13 +38,11 @@ export default {
         this.cardX = this.lerp(this.cardX, this.mouseX - 118, 0.05)
         this.cardY = this.lerp(this.cardY, this.mouseY - 50, 0.05)
 
-
         var rotateYAmt = 0;
         var rotateXAmt = 0;
         var shadowH = 0;
         var shadowV = 11;
 
-        // console.log("mousex - cardx", (this.mouseX - this.cardX) - 118);
         if (((this.mouseX - this.cardX) - 118) < -20) {
           rotateYAmt = -25;
           shadowH = 17;
