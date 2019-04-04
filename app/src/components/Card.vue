@@ -38,40 +38,39 @@ export default {
         this.cardX = this.lerp(this.cardX, this.mouseX - 118, 0.05)
         this.cardY = this.lerp(this.cardY, this.mouseY - 50, 0.05)
 
-        var rotateYAmt = 0;
-        var rotateXAmt = 0;
-        var shadowH = 0;
-        var shadowV = 11;
+        var rotateYAmt = 0
+        var rotateXAmt = 0
+        var shadowH = 0
+        var shadowV = 11
 
         if (((this.mouseX - this.cardX) - 118) < -20) {
-          rotateYAmt = -25;
-          shadowH = 17;
+          rotateYAmt = -25
+          shadowH = 17
         }
         else if (((this.mouseX - this.cardX) - 118) > 20) {
-          rotateYAmt = 25;
-          shadowH = -17;
+          rotateYAmt = 25
+          shadowH = -17
         }
         else {
-          rotateYAmt = 0;
-          shadowH = 0;
+          rotateYAmt = 0
+          shadowH = 0
         }
 
         if (((this.mouseY - this.cardY) - 50) > 20) {
-          rotateXAmt = 25;
-          shadowV = -28;
-          
+          rotateXAmt = 25
+          shadowV = -28
         }
         else if (((this.mouseY - this.cardY) - 50) < -20) {
-          rotateXAmt = -25;
-          shadowV = 28;
+          rotateXAmt = -25
+          shadowV = 28
         }
         else {
-          rotateXAmt = 0;
-          shadowV = 18;
+          rotateXAmt = 0
+          shadowV = 18
         }
 
-        this.$el.style.transform = "rotateX("+ rotateXAmt + "deg) rotateY(" + rotateYAmt + "deg)";
-        this.$el.style.boxShadow = shadowH + "px " + shadowV + "px 18px -2px rgba(0,0,0,0.75)";
+        this.$el.style.transform = 'rotateX(' + rotateXAmt + 'deg) rotateY(' + rotateYAmt + 'deg)'
+        this.$el.style.boxShadow = shadowH + 'px ' + shadowV + 'px 18px -2px rgba(0,0,0,0.75)'
 
         this.$el.style.left = this.cardX + 'px'
         this.$el.style.top = this.cardY + 'px'
@@ -84,8 +83,8 @@ export default {
       this.$el.style.top = 'inherit'
       this.$el.style.zIndex = 'inherit'
 
-      this.$el.style.transform = "rotateY(0deg)"
-      this.$el.style.boxShadow = "0px 11px 18px -2px rgba(0,0,0,0.75)";
+      this.$el.style.transform = 'rotateY(0deg)'
+      this.$el.style.boxShadow = '0px 11px 18px -2px rgba(0,0,0,0.75)'
       this.isPressed = false
     },
     lerp (start, end, amt) {

@@ -1,10 +1,11 @@
 <template>
   <div id="app">
+
     <div class="button" @click="addCard()">
       Card
     </div>
     <div class="hand">
-      <template v-for="(card, index) in cards">
+      <template v-for="(card, index) in this.game.player.hand">
         <Card :card='card' :cardId="index" :key="index" @mousedown="mouseIsPressed()"></Card>
       </template>
     </div>
@@ -14,39 +15,25 @@
 <script>
 import axios from 'axios'
 import Card from '../components/Card.vue'
-// import cardsJson from '../AllSets.json'
-// https://img.scryfall.com/cards/png/en/exp/43.png?1517813031
-// console.log(cardsJson);
-// console.log(cardsJson[2]);
-
-// var randomProperty = function (obj) {
-//     var keys = Object.keys(obj)
-//     return obj[keys[ keys.length * Math.random() << 0]];
-// };
 
 export default {
   name: 'app',
-  data () {
-    return {
-      cards: []
-    }
-  },
   components: {
     Card
   },
   methods: {
     addCard () {
-      axios.get('http://localhost:3000/getRandomCard')
-        .then(res => {
-          console.log(res)
-          this.cards.push(res.data)
-        })
-        .catch(error => console.log(error))
+      this.$store.dispatch('onGetRandomCard', false);
     },
     mouseIsPressed () {
       console.log('we pressing!')
     }
-  }
+  },
+  computed: {
+    game() {
+      return this.$store.getters.game
+    }
+  },
 }
 </script>
 
