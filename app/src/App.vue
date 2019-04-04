@@ -2,6 +2,7 @@
   <div>
     <div id="nav">
       <router-link to="/">Home</router-link> |
+      <router-link to="/game">Game</router-link> |
       <router-link to="/about">About</router-link>
     </div>
     <!-- <img src="https://img.scryfall.com/cards/large/en/c16/322.jpg?1517813031" width="300" alt="test"> -->
