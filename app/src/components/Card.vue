@@ -76,7 +76,8 @@ export default {
         /* position: absolute; */
         /* bottom: 0; */
         /* margin: 0px -30px; */
-        margin-bottom: -146px;
+        margin-bottom: -137px;
+        border-radius: 12px;
     }
 
     .zoom:hover {
