@@ -151,13 +151,17 @@ export default {
         validatePassword() {
             // Making sure the password is at least 8 character (really standard, nothing fancy)
             this.formdata.password.isValid = this.formdata.password.value.length >= 8;
-            this.applyValidationColor('password', this.formdata.password.isValid)
+            if (this.formdata.password.isTouched) {
+                this.applyValidationColor('password', this.formdata.password.isValid)
+            }
         },
         validateConfirmPassword() {
             // Making sure the confirmation matches the password
             this.formdata.confirmpassword.isValid = this.formdata.password.value === this.formdata.confirmpassword.value && this.formdata.password.isValid;
 
-            this.applyValidationColor('confirm', this.formdata.confirmpassword.isValid)
+            if (this.formdata.confirmpassword.isTouched) {
+                this.applyValidationColor('confirm', this.formdata.confirmpassword.isValid)
+            }
         }
     }
 }
