@@ -5,13 +5,35 @@
             <div class="user-create-form">
                 <h1 class="title">Sign Up</h1>
                 <div class="pill-input">
-                    <div class="left-pill">
-
-                    </div>
+                    <div class="left-pill"><i class="fas fa-envelope"></i></div>
                     <div class="pill-input-area">
-                        <input type="text" class="pill-input-tag"/>
+                        <input type="text" placeholder="E-Mail" class="pill-input-tag"/>
                     </div>
                     <div class="right-pill"></div>
+                </div>
+                <div class="pill-input">
+                    <div class="left-pill"><i class="fas fa-user-alt"></i></div>
+                    <div class="pill-input-area">
+                        <input type="text" placeholder="Username" class="pill-input-tag"/>
+                    </div>
+                    <div class="right-pill"></div>
+                </div>
+                <div class="pill-input">
+                    <div class="left-pill"><i class="fas fa-key"></i></div>
+                    <div class="pill-input-area">
+                        <input type="password" placeholder="Password" class="pill-input-tag"/>
+                    </div>
+                    <div class="right-pill"></div>
+                </div>
+                <div class="pill-input">
+                    <div class="left-pill"><i class="fas fa-key"></i></div>
+                    <div class="pill-input-area">
+                        <input type="password" placeholder="Confirm Password" class="pill-input-tag"/>
+                    </div>
+                    <div class="right-pill"></div>
+                </div>
+                <div class="submit-button">
+                    Submit
                 </div>
             </div>
         </div>
@@ -26,7 +48,7 @@
         font-weight: lighter;
     }
     .title {
-        margin-left: 70px;
+        margin-left: 120px;
         color: #777;
     }
     .user-create-form {
@@ -34,7 +56,7 @@
         width: 100%;
         display: inline-block;
         position: relative;
-        margin-top: 100px;
+        margin-top: 65px;
     }
     .bg {
         position: relative;
@@ -68,54 +90,68 @@
         border-radius: 5px;
     }
     .pill-input {
-        /* width: 100%; */
         height: 60px;
-        /* background-color: aqua; */
-        display: block;
-        margin-left: 50px;
+        display: flex;
+        margin: auto;
+        /* margin-left: 50px; */
+        width: 70%;
         margin-top: 25px;
+        text-align: center;
     }
     .pill-input-area {
-        width: 250px;
-        /* background-color: aquamarine; */
+        /* width: 250px; */
         display: inline-block;
         height: 60px;
         vertical-align: top;
-        /* top: 0px; */
         position: relative;
-    }
-    .pill-input-tag {
-        /* width: 250px; */
-        position: relative;
-        /* background-color: aquamarine; */
-        display: inline-block;
-        height: 60px;
-        padding: 0px;
-        border: 0px;
+        flex: 1;
         border-top: 2px solid #ccc;
         border-bottom: 2px solid #ccc;
         box-sizing: border-box;
+        line-height: 58px;
+        /* line-height: 60px; */
+    }
+    .pill-input-tag {
+        position: relative;
+        display: inline-block;
+        /* height: 100%; */
+        padding: 0px;
+        border: 0px;
+    }
+    .submit {
+        line-height: 60px;
     }
     input {
         display: inline-block;
         width: 100%;
         background-color: ghostwhite;
+        font-size: 1.05em;
+    }
+    input::placeholder {
+        color: #aaa;
+    }
+    input:focus {
+        display: inline-block;
+        width: 100%;
+        background-color: ghostwhite;
+        outline: none;
     }
     .left-pill {
-        /* background-color: aquamarine; */
         display: inline-block;
-        width: 50px;
+        width: 70px;
         height: 60px;
-        border-top-left-radius: 50%;
-        border-bottom-left-radius: 50%;
+        border-top-left-radius: 30px;
+        border-bottom-left-radius: 30px;
         border-left: 2px solid #ccc;
         border-top: 2px solid #ccc;
         border-bottom: 2px solid #ccc;
         box-sizing: border-box;
+        line-height: 58px;
+        color: #aaa;
+        font-size: 22px;
     }
     .right-pill {
         display: inline-block;
-        /* background-color: aquamarine; */
         width: 50px;
         height: 60px;
         border-top-right-radius: 50%;
@@ -124,5 +160,31 @@
         border-top: 2px solid #ccc;
         border-bottom: 2px solid #ccc;
         box-sizing: border-box;
+    }
+
+    .submit-button {
+        cursor: pointer;
+        /* border: 2px solid #ccc; */
+        border-radius: 35px;
+        text-align: center;
+        color: ghostwhite;
+        font-weight: bold;
+
+        height: 60px;
+        display: block;
+        margin: auto;
+        width: 70%;
+        margin-top: 25px;
+        line-height: 60px;
+
+        background: rgba(52,163,247,1);
+        background: -moz-linear-gradient(left, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
+        background: -webkit-gradient(left top, right top, color-stop(0%, rgba(52,163,247,1)), color-stop(100%, rgba(90,39,230,1)));
+        background: -webkit-linear-gradient(left, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
+        background: -o-linear-gradient(left, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
+        background: -ms-linear-gradient(left, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
+        background: linear-gradient(to right, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34a3f7', endColorstr='#5a27e6', GradientType=1 );
+
     }
 </style>
