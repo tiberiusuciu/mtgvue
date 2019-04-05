@@ -5,34 +5,62 @@
                 <div class="user-create-form">
                     <h1 class="title">Sign Up</h1>
                     <div class="pill-input" id="email">
-                        <div class="left-pill"><i class="fas fa-envelope"></i></div>
+                        <div class="left-pill"><i class="fas fa-envelope" :class='{"invalid": (!formdata.email.isValid && formdata.email.isTouched), "valid": (formdata.email.isValid && formdata.email.isTouched)}'></i></div>
                         <div class="pill-input-area">
-                            <input type="text" placeholder="E-Mail" class="pill-input-tag"/>
+                            <input 
+                                type="email"
+                                placeholder="E-Mail"
+                                class="pill-input-tag" 
+                                v-model="formdata.email.value"
+                                @change='hasChanged("email")'
+                                @blur='validateEmail()'
+                                :class='{"invalid": (!formdata.email.isValid && formdata.email.isTouched), "valid": (formdata.email.isValid && formdata.email.isTouched)}'/>
                         </div>
                         <div class="right-pill"></div>
                     </div>
                     <div class="pill-input" id="username">
-                        <div class="left-pill"><i class="fas fa-user-alt"></i></div>
+                        <div class="left-pill"><i class="fas fa-user-alt" :class='{"invalid": (!formdata.username.isValid && formdata.username.isTouched), "valid": (formdata.username.isValid && formdata.username.isTouched)}'></i></div>
                         <div class="pill-input-area">
-                            <input type="text" placeholder="Username" class="pill-input-tag"/>
+                            <input
+                                type="text"
+                                placeholder="Username"
+                                class="pill-input-tag"
+                                v-model="formdata.username.value"
+                                @change='hasChanged("username")'
+                                @blur='validateUsername()'
+                                :class='{"invalid": (!formdata.username.isValid && formdata.username.isTouched), "valid": (formdata.username.isValid && formdata.username.isTouched)}'/>
                         </div>
                         <div class="right-pill"></div>
                     </div>
                     <div class="pill-input" id="password">
-                        <div class="left-pill"><i class="fas fa-key"></i></div>
+                        <div class="left-pill"><i class="fas fa-key" :class='{"invalid": (!formdata.password.isValid && formdata.password.isTouched), "valid": (formdata.password.isValid && formdata.password.isTouched)}'></i></div>
                         <div class="pill-input-area">
-                            <input type="password" placeholder="Password" class="pill-input-tag"/>
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                class="pill-input-tag"
+                                v-model="formdata.password.value"
+                                @change='hasChanged("password")'
+                                @blur='validatePassword()'
+                                :class='{"invalid": (!formdata.password.isValid && formdata.password.isTouched), "valid": (formdata.password.isValid && formdata.password.isTouched)}'/>
                         </div>
                         <div class="right-pill"></div>
                     </div>
                     <div class="pill-input" id="confirm">
-                        <div class="left-pill"><i class="fas fa-key"></i></div>
+                        <div class="left-pill"><i class="fas fa-key" :class='{"invalid": (!formdata.confirmpassword.isValid && formdata.confirmpassword.isTouched), "valid": (formdata.confirmpassword.isValid && formdata.confirmpassword.isTouched)}'></i></div>
                         <div class="pill-input-area">
-                            <input type="password" placeholder="Confirm Password" class="pill-input-tag"/>
+                            <input
+                                type="password"
+                                placeholder="Confirm Password"
+                                class="pill-input-tag"
+                                v-model="formdata.confirmpassword.value"
+                                @change='hasChanged("confirmpassword")'
+                                @blur='validateConfirmPassword()'
+                                :class='{"invalid": (!formdata.confirmpassword.isValid && formdata.confirmpassword.isTouched), "valid": (formdata.confirmpassword.isValid && formdata.confirmpassword.isTouched)}'/>
                         </div>
                         <div class="right-pill"></div>
                     </div>
-                    <div class="submit-button">
+                    <div class="submit-button" @click="submitSignup">
                         Submit
                     </div>
                 </div>
@@ -48,7 +76,72 @@
     </div>
 </template>
 
+<script>
+    export default {
+        data() {
+            return {
+                formdata: {
+                    email: {
+                        value: "",
+                        isValid: false,
+                        isTouched: false
+                    },
+                    username: {
+                        value: "",
+                        isValid: false,
+                        isTouched: false
+                    },
+                    password: {
+                        value: "",
+                        isValid: false,
+                        isTouched: false
+                    },
+                    confirmpassword: {
+                        value: "",
+                        isValid: false,
+                        isTouched: false
+                    },
+                }
+            }
+        },
+        methods: {
+            submitSignup() {
+                console.log(this.formdata);
+            },
+            hasChanged(key) {
+                this.formdata[key].isTouched = true;
+            },
+            validateEmail() {
+                // basic email validation
+                var emailfield = document.querySelector('#email input');
+                this.formdata.email.isValid = emailfield.checkValidity() && this.formdata.email.isTouched;
+            },
+            validateUsername() {
+                // Making sure username has no special characters, and it's not empty either
+                this.formdata.username.value = this.formdata.username.value.trim();
+                var format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+                this.formdata.username.isValid = !format.test(this.formdata.username.value) && !this.formdata.username.value.length == 0;
+            },
+            validatePassword() {
+                // Making sure the password is at least 8 character (really standard, nothing fancy)
+                this.formdata.password.isValid = this.formdata.password.value.length >= 8;
+            },
+            validateConfirmPassword() {
+                // Making sure the confirmation matches the password
+                this.formdata.confirmpassword.isValid = this.formdata.password.value === this.formdata.confirmpassword.value && this.formdata.password.isValid;
+            }
+        },
+    }
+</script>
+
 <style scoped>
+    .invalid {
+        color: lightcoral;
+    }
+    .valid {
+        color: dodgerblue;
+    }
+
     .title {
         margin: 0px;
         padding: 0px;
@@ -100,7 +193,6 @@
         display: inline-block;
         width: 50%;
         color: ghostwhite;
-        /* padding: 30px; */
         padding: 30px 0px 0px 60px;
         box-sizing: border-box;
         vertical-align: top;
