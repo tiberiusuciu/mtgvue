@@ -3,9 +3,10 @@
     <transition name="fade">
       <div id="nav" v-if="showMenu">
         <div class="menu">
-          <router-link to="/">Home</router-link> |
-          <router-link to="/game">Game</router-link> |
-          <router-link to="/about">About</router-link>
+          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/" class="first-item" exact>Home</router-link>
+          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/signup">Sign Up</router-link>
+          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/game">Game</router-link>
+          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/about">About</router-link>
         </div>
         <div class="shadow" @click="toggleMenu">
 
@@ -31,6 +32,7 @@
     methods: {
       toggleMenu() {
         // This animates the slide effect for the menu. This could be re-written using vuejs transitions perhaps
+        // give callbacks!
         if (!this.showMenu) {
           clearInterval(this.menuInterval);
           this.currentWidth = 0;
@@ -70,6 +72,13 @@
 </script>
 
 <style>
+body {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* text-align: center; */
+  color: #2c3e50;
+}
 #nav {
   position: absolute;
   display: flex;
@@ -77,21 +86,43 @@
   top: 0;
   height: 100vh;
   z-index: 11;
+  /* padding-top: 30px; */
 }
 .menu {
   width: 300px;
   background-color: #223;
+  /* padding: 30px; */
 }
 .shadow {
   flex: 1;
   background-color: #0006;
 }
+
+.first-item {
+  margin-top: 30px;
+}
 #nav a {
-  color: white;
+  color: ghostwhite;
   text-decoration: none;
+  display: block;
+  height: 60px;
+  line-height: 60px;
+  padding: 0px 30px;
+  transition: background-color .25s ease-in-out;
+}
+#nav a:hover {
+  color: ghostwhite;
+  background-color: #FFFFFF22;
+  text-decoration: none;
+  display: block;
+  height: 60px;
+  line-height: 60px;
+}
+.active-link {
+  background-color: #FFFFFF22;
 }
 .burger-button {
-  background-color: ghostwhite;
+  background-color: transparent;
   position: absolute;
   top: 0px;
   height: 60px;
@@ -101,6 +132,7 @@
   transition-property: line-height;
   transition-duration: .25s;
   transition-timing-function: ease-in-out;
+  z-index: 1;
 }
 
 .burger-button:hover i{
