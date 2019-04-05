@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import axios from 'axios';
+const bcrypt = require('bcryptjs');
 
 Vue.use(Vuex)
 
@@ -37,9 +38,32 @@ export default new Vuex.Store({
       commit('addCardToHand', card, isOpponent);
     },
     onGetRandomCard ({commit}, isOpponent) {
-      axios.get('http://localhost:3000/getRandomCard')
+      axios.get('http://localhost:3000/randomcard')
         .then(res => {
           commit('addCardToHand', {card: res.data, isOpponent})
+        })
+        .catch(error => console.log(error))
+    },
+    onCreateUser ({commit}, formdata) {
+      // salt the password first!
+      var salt = bcrypt.genSaltSync(10);
+      var hash = bcrypt.hashSync(formdata.password.value, salt);
+
+      axios.post('http://localhost:3000/user', {
+        email: formdata.email.value,
+        username: formdata.username.value,
+        password: hash
+      }, { 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        responseType: 'blob'
+      })
+        .then(res => {
+          // commit('addCardToHand', {card: res.data, isOpponent})
+          // show a popup or something to confirm user creation
+          console.log('User has been created');
+          
         })
         .catch(error => console.log(error))
     }

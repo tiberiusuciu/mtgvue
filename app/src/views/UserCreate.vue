@@ -103,6 +103,7 @@ export default {
     methods: {
         submitSignup() {
             console.log(this.formdata);
+            this.$store.dispatch('onCreateUser', this.formdata);
         },
         hasChanged(key) {
             this.formdata[key].isTouched = true;
