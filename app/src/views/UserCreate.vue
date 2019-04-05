@@ -42,12 +42,10 @@
 </template>
 
 <style scoped>
-    h1 {
+    .title {
         margin: 0px;
         padding: 0px;
         font-weight: lighter;
-    }
-    .title {
         margin-left: 120px;
         color: #777;
     }
@@ -63,7 +61,7 @@
         width: 100%;
         height: 100vh;
         background-color: #335;
-        background-image: url('https://images.unsplash.com/photo-1554147090-e1221a04a025?ixlib=rb-1.2.1&auto=format&fit=crop&w=1631&q=80');
+        background-image: url('/img/backgrounds/usercreate.jpg');
         background-size: cover;
     }
     .backdrop {
@@ -93,33 +91,29 @@
         height: 60px;
         display: flex;
         margin: auto;
-        /* margin-left: 50px; */
         width: 70%;
         margin-top: 25px;
         text-align: center;
     }
-    .pill-input-area {
-        /* width: 250px; */
+    .left-pill, .right-pill, .pill-input-area {
         display: inline-block;
         height: 60px;
-        vertical-align: top;
-        position: relative;
-        flex: 1;
         border-top: 2px solid #ccc;
         border-bottom: 2px solid #ccc;
         box-sizing: border-box;
+    }
+
+    .pill-input-area {
+        vertical-align: top;
+        position: relative;
+        flex: 1;
         line-height: 58px;
-        /* line-height: 60px; */
     }
     .pill-input-tag {
         position: relative;
         display: inline-block;
-        /* height: 100%; */
         padding: 0px;
         border: 0px;
-    }
-    .submit {
-        line-height: 60px;
     }
     input {
         display: inline-block;
@@ -136,35 +130,25 @@
         background-color: ghostwhite;
         outline: none;
     }
+
     .left-pill {
-        display: inline-block;
         width: 70px;
-        height: 60px;
         border-top-left-radius: 30px;
         border-bottom-left-radius: 30px;
         border-left: 2px solid #ccc;
-        border-top: 2px solid #ccc;
-        border-bottom: 2px solid #ccc;
-        box-sizing: border-box;
         line-height: 58px;
         color: #aaa;
         font-size: 22px;
     }
     .right-pill {
-        display: inline-block;
         width: 50px;
-        height: 60px;
         border-top-right-radius: 50%;
         border-bottom-right-radius: 50%;
         border-right: 2px solid #ccc;
-        border-top: 2px solid #ccc;
-        border-bottom: 2px solid #ccc;
-        box-sizing: border-box;
     }
 
     .submit-button {
         cursor: pointer;
-        /* border: 2px solid #ccc; */
         border-radius: 35px;
         text-align: center;
         color: ghostwhite;
