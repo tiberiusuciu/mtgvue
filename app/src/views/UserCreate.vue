@@ -1,43 +1,50 @@
 <template>
     <div class="bg">
-      <div class="backdrop">
-        <div class="user-create-box">
-            <div class="user-create-form">
-                <h1 class="title">Sign Up</h1>
-                <div class="pill-input">
-                    <div class="left-pill"><i class="fas fa-envelope"></i></div>
-                    <div class="pill-input-area">
-                        <input type="text" placeholder="E-Mail" class="pill-input-tag"/>
+        <div class="backdrop">
+            <div class="user-create-box">
+                <div class="user-create-form">
+                    <h1 class="title">Sign Up</h1>
+                    <div class="pill-input" id="email">
+                        <div class="left-pill"><i class="fas fa-envelope"></i></div>
+                        <div class="pill-input-area">
+                            <input type="text" placeholder="E-Mail" class="pill-input-tag"/>
+                        </div>
+                        <div class="right-pill"></div>
                     </div>
-                    <div class="right-pill"></div>
-                </div>
-                <div class="pill-input">
-                    <div class="left-pill"><i class="fas fa-user-alt"></i></div>
-                    <div class="pill-input-area">
-                        <input type="text" placeholder="Username" class="pill-input-tag"/>
+                    <div class="pill-input" id="username">
+                        <div class="left-pill"><i class="fas fa-user-alt"></i></div>
+                        <div class="pill-input-area">
+                            <input type="text" placeholder="Username" class="pill-input-tag"/>
+                        </div>
+                        <div class="right-pill"></div>
                     </div>
-                    <div class="right-pill"></div>
-                </div>
-                <div class="pill-input">
-                    <div class="left-pill"><i class="fas fa-key"></i></div>
-                    <div class="pill-input-area">
-                        <input type="password" placeholder="Password" class="pill-input-tag"/>
+                    <div class="pill-input" id="password">
+                        <div class="left-pill"><i class="fas fa-key"></i></div>
+                        <div class="pill-input-area">
+                            <input type="password" placeholder="Password" class="pill-input-tag"/>
+                        </div>
+                        <div class="right-pill"></div>
                     </div>
-                    <div class="right-pill"></div>
-                </div>
-                <div class="pill-input">
-                    <div class="left-pill"><i class="fas fa-key"></i></div>
-                    <div class="pill-input-area">
-                        <input type="password" placeholder="Confirm Password" class="pill-input-tag"/>
+                    <div class="pill-input" id="confirm">
+                        <div class="left-pill"><i class="fas fa-key"></i></div>
+                        <div class="pill-input-area">
+                            <input type="password" placeholder="Confirm Password" class="pill-input-tag"/>
+                        </div>
+                        <div class="right-pill"></div>
                     </div>
-                    <div class="right-pill"></div>
+                    <div class="submit-button">
+                        Submit
+                    </div>
                 </div>
-                <div class="submit-button">
-                    Submit
+            </div>
+            <div class="secondary-panel">
+                <h1>Sign in</h1>
+                <h4>If you already have an account, click right here to connect</h4>
+                <div class="login-button">
+                    Sign In
                 </div>
             </div>
         </div>
-      </div>
     </div>
 </template>
 
@@ -76,16 +83,31 @@
         margin: auto;
         z-index: 0;
         border-radius: 5px;
+        max-width: 1186px;
     }
     .user-create-box {
         height: 600px;
         width: 50%;
+        display: inline-block;
         background-color: ghostwhite;
         margin-top: -50px;
         -webkit-box-shadow: -18px 0px 48px -14px rgba(0,0,0,0.73);
         -moz-box-shadow: -18px 0px 48px -14px rgba(0,0,0,0.73);
         box-shadow: -18px 0px 48px -14px rgba(0,0,0,0.73);
         border-radius: 5px;
+    }
+    .secondary-panel {
+        display: inline-block;
+        width: 50%;
+        color: ghostwhite;
+        /* padding: 30px; */
+        padding: 30px 0px 0px 60px;
+        box-sizing: border-box;
+        vertical-align: top;
+        margin-top: 100px;
+    }
+    .secondary-panel h4, .secondary-panel h1  {
+        font-weight: lighter;
     }
     .pill-input {
         height: 60px;
@@ -170,5 +192,21 @@
         background: linear-gradient(to right, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34a3f7', endColorstr='#5a27e6', GradientType=1 );
 
+    }
+    .login-button {
+        cursor: pointer;
+        border-radius: 35px;
+        text-align: center;
+        color: ghostwhite;
+        font-weight: bold;
+
+        height: 60px;
+        display: block;
+        width: 175px;
+        line-height: 60px;
+        box-sizing: border-box;
+        margin-top: 50px;
+
+        border: 2px solid #ccc;
     }
 </style>
