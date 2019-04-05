@@ -63,3 +63,6 @@ typings/
 
 api/helper/tmp/*
 AllSets.json
+
+app/package-lock.json
+api/package-lock.json
