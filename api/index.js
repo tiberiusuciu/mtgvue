@@ -54,7 +54,6 @@ db.once('open', function() {
 
         // Let's make sure the email is not already taken
         User.find({ email: userform.email }, function (err, docs) {
-            console.log('Total findings:', docs);
             if (docs.length >= 1) {
                 // return error
                 res.send({isTaken: true});

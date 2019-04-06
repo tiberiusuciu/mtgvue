@@ -3,62 +3,98 @@
         <div class="backdrop">
             <div class="user-create-box">
                 <div class="user-create-form">
-                    <h1 class="title">Sign Up</h1>
-                    <div class="pill-input" id="email">
-                        <div class="left-pill"><i class="fas fa-envelope"></i></div>
-                        <div class="pill-input-area">
-                            <input 
-                                type="email"
-                                placeholder="E-Mail"
-                                class="pill-input-tag" 
-                                v-model="formdata.email.value"
-                                @change='hasChanged("email")'
-                                @blur='validateEmail()'/>
+                    <template v-if="!requests.isLoading && !requests.requestSent">
+                        <h1 class="title">Sign Up</h1>
+                        <div class="pill-input" id="email">
+                            <div class="left-pill"><i class="fas fa-envelope"></i></div>
+                            <div class="pill-input-area">
+                                <input 
+                                    type="email"
+                                    placeholder="E-Mail"
+                                    class="pill-input-tag" 
+                                    v-model="formdata.email.value"
+                                    @change='hasChanged("email")'
+                                    @blur='validateEmail()'/>
+                            </div>
+                            <div class="right-pill"></div>
                         </div>
-                        <div class="right-pill"></div>
-                    </div>
-                    <!-- thinking of removing username, it's one extra step that should be done after account creation -->
-                    <!-- <div class="pill-input" id="username">
-                        <div class="left-pill"><i class="fas fa-user-alt"></i></div>
-                        <div class="pill-input-area">
-                            <input
-                                type="text"
-                                placeholder="Username"
-                                class="pill-input-tag"
-                                v-model="formdata.username.value"
-                                @change='hasChanged("username")'
-                                @blur='validateUsername()'/>
+                        <!-- thinking of removing username, it's one extra step that should be done after account creation -->
+                        <!-- <div class="pill-input" id="username">
+                            <div class="left-pill"><i class="fas fa-user-alt"></i></div>
+                            <div class="pill-input-area">
+                                <input
+                                    type="text"
+                                    placeholder="Username"
+                                    class="pill-input-tag"
+                                    v-model="formdata.username.value"
+                                    @change='hasChanged("username")'
+                                    @blur='validateUsername()'/>
+                            </div>
+                            <div class="right-pill"></div>
+                        </div> -->
+                        <div class="pill-input" id="password">
+                            <div class="left-pill"><i class="fas fa-key"></i></div>
+                            <div class="pill-input-area">
+                                <input
+                                    type="password"
+                                    placeholder="Password (8 char min)"
+                                    class="pill-input-tag"
+                                    v-model="formdata.password.value"
+                                    @change='hasChanged("password")'
+                                    @blur='validatePassword()'/>
+                            </div>
+                            <div class="right-pill"></div>
                         </div>
-                        <div class="right-pill"></div>
-                    </div> -->
-                    <div class="pill-input" id="password">
-                        <div class="left-pill"><i class="fas fa-key"></i></div>
-                        <div class="pill-input-area">
-                            <input
-                                type="password"
-                                placeholder="Password (8 char min)"
-                                class="pill-input-tag"
-                                v-model="formdata.password.value"
-                                @change='hasChanged("password")'
-                                @blur='validatePassword()'/>
+                        <div class="pill-input" id="confirm">
+                            <div class="left-pill"><i class="fas fa-check-circle"></i></div>
+                            <div class="pill-input-area">
+                                <input
+                                    type="password"
+                                    placeholder="Confirm Password"
+                                    class="pill-input-tag"
+                                    v-model="formdata.confirmpassword.value"
+                                    @keyup='handler()'/>
+                            </div>
+                            <div class="right-pill"></div>
                         </div>
-                        <div class="right-pill"></div>
-                    </div>
-                    <div class="pill-input" id="confirm">
-                        <div class="left-pill"><i class="fas fa-check-circle"></i></div>
-                        <div class="pill-input-area">
-                            <input
-                                type="password"
-                                placeholder="Confirm Password"
-                                class="pill-input-tag"
-                                v-model="formdata.confirmpassword.value"
-                                @keyup='handler()'/>
+                        <div class="submit-button" :class='{"disable": !isSubmitAvailable, "tooltip": isFormInvalid}' @click="submitSignup">
+                            Submit
                         </div>
-                        <div class="right-pill"></div>
-                    </div>
-                    <div class="submit-button" :class='{"disable": !isSubmitAvailable, "tooltip": isFormInvalid}' @click="submitSignup">
-                        Submit
-                    </div>
+                    </template>
+
+                    <template v-if="requests.isLoading && requests.requestSent">
+                        <div class="spring-spinner">
+                            <div class="spring-spinner-part top">
+                                <div class="spring-spinner-rotator"></div>
+                            </div>
+                        <h1 class="title loading">Loading...</h1>
+                            <div class="spring-spinner-part bottom">
+                                <div class="spring-spinner-rotator"></div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template v-if="!requests.isLoading && requests.requestSent">
+                        <template v-if="!requests.isLoading && requests.requestSent && !requests.isError">
+                            <h1 class="title postrequest-message">
+                                Success!
+                            </h1>
+                            <p class="postrequest-message-more">
+                                A confirmation message has been sent to your email.
+                            </p>
+                            <p class="postrequest-message-more">
+                                Please confirm it in the next 10 days, otherwise this account will be deleted 
+                            </p>
+                            <div class="postrequest-message-button">
+                                Ok
+                            </div>
+                        </template>
+                        <template v-if="!requests.isLoading && requests.requestSent && requests.isError">
+                            <h1 class="title postrequest-message">
+                                Error!
+                            </h1>
+                        </template>
+                    </template>
                 </div>
             </div>
             <div class="secondary-panel">
@@ -104,7 +140,6 @@ export default {
     },
     methods: {
         submitSignup() {
-            // console.log(this.formdata);
             if (this.isSubmitAvailable) {
                 this.$store.dispatch('onCreateUser', this.formdata);
             }
@@ -184,7 +219,12 @@ export default {
                 this.applyValidationColor('confirm', this.formdata.confirmpassword.isValid)
             }
         }
-    }
+    },
+    computed: {
+        requests() {
+            return this.$store.getters.requests
+        }
+    },
 }
 </script>
 
@@ -364,5 +404,107 @@ export default {
         background: linear-gradient(to right, #dedede 0%, #dedede 100%);
         /* filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34a3f7', endColorstr='#5a27e6', GradientType=1 ); */
         cursor: unset;
+    }
+    .loading {
+        margin: 0px;
+        top: 0px;
+        bottom: 0px;
+        right: 0px;
+        left: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        height: 40px;
+        line-height: 306px;
+        position: absolute;
+    }
+
+    /* spinner taken graciously from https://epic-spinners.epicmax.co/?ref=madewithvuejs.com#/ */
+    .spring-spinner, .spring-spinner * {
+      box-sizing: border-box;
+    }
+
+    .spring-spinner {
+        height: 300px;
+        width: 300px;
+        margin: auto;
+        margin-top: 30px;
+        position: relative;
+    }
+
+    .spring-spinner .spring-spinner-part {
+      overflow: hidden;
+      height: calc(300px / 2);
+      width: 300px;
+    }
+
+    .spring-spinner  .spring-spinner-part.bottom {
+       transform: rotate(180deg) scale(-1, 1);
+     }
+
+    .spring-spinner .spring-spinner-rotator {
+      width: 300px;
+      height: 300px;
+      border: calc(300px / 7) solid transparent;
+      border-right-color: dodgerblue;
+      border-top-color: dodgerblue;
+      border-radius: 50%;
+      box-sizing: border-box;
+      animation: spring-spinner-animation 3s ease-in-out infinite;
+      transform: rotate(-200deg);
+    }
+
+    @keyframes spring-spinner-animation {
+      0% {
+        border-width: calc(300px / 23.33);
+      }
+      25% {
+        border-width: calc(300px / 23.33);
+      }
+      50% {
+        transform: rotate(115deg);
+        border-width: calc(300px / 23.33);
+      }
+      75% {
+        border-width: calc(300px / 23.33);
+      }
+      100% {
+        border-width: calc(300px / 23.33);
+      }
+    }
+    .postrequest-message {
+        margin-top: 80px;
+    }
+    .postrequest-message-more {
+        margin: 20px 120px 0px 120px;
+        color: #888;
+        letter-spacing: 1px;
+    }
+
+    .postrequest-message-button {
+        width: 200px;
+        display: block;
+        margin: auto;
+        margin-top: 30px;
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        color: ghostwhite;
+        font-weight: bold;
+        border-radius: 35px;
+        cursor: pointer;
+        background: rgba(52,163,247,1);
+        background: -moz-linear-gradient(left, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
+        background: -webkit-gradient(left top, right top, color-stop(0%, rgba(52,163,247,1)), color-stop(100%, rgba(90,39,230,1)));
+        background: -webkit-linear-gradient(left, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
+        background: -o-linear-gradient(left, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
+        background: -ms-linear-gradient(left, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
+        background: linear-gradient(to right, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34a3f7', endColorstr='#5a27e6', GradientType=1 );
+        opacity: 1;
+        transition: opacity .15s ease-in-out;
+    }
+    .postrequest-message-button:hover {
+        opacity: .8;
     }
 </style>

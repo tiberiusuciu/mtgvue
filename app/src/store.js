@@ -18,6 +18,11 @@ export default new Vuex.Store({
       opponents: [],
       chat: [],
       spectators: []
+    },
+    requests: {
+      requestSent: false,
+      isLoading: false,
+      isError: false,
     }
   },
   mutations: {
@@ -28,6 +33,9 @@ export default new Vuex.Store({
       if(!isOpponent) {
         state.game.player.hand.push(card)
       }
+    },
+    requestToServer (state, requests) {
+      state.requests = requests
     }
   },
   actions: {
@@ -45,6 +53,12 @@ export default new Vuex.Store({
         .catch(error => console.log(error))
     },
     onCreateUser ({commit}, formdata) {
+      commit('requestToServer', {
+        requestSent: true,
+        isLoading: true,
+        isError: false
+      });
+
       // salt the password first!
       var salt = bcrypt.genSaltSync(10);
       var hash = bcrypt.hashSync(formdata.password.value, salt);
@@ -63,6 +77,11 @@ export default new Vuex.Store({
           // commit('addCardToHand', {card: res.data, isOpponent})
           // show a popup or something to confirm user creation
           console.log('User has been created');
+          commit('requestToServer', {
+            requestSent: true,
+            isLoading: false,
+            isError: false
+          });
           
         })
         .catch(error => console.log(error))
@@ -78,5 +97,8 @@ export default new Vuex.Store({
     game (state) {
       return state.game;
     },
+    requests (state) {
+      return state.requests
+    }
   }
 })

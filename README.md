@@ -30,7 +30,7 @@ I want to synthesize the various technologies and methodologies that I have lear
   - [NodeJs](https://nodejs.org/en/) - Javascript Framework running in the backend as a server!
   - [Express](https://expressjs.com/) - HTTP utilities for the backend
   - [Mongoose](https://mongoosejs.com/) - ODM for my database
-  - [cors](https://github.com/expressjs/cors#readme) - For simply making your life easier when testing locally
+  - [Cors](https://github.com/expressjs/cors#readme) - For simply making your life easier when testing locally
   - [Nodemon](https://nodemon.io/) - Tool for quick reloading upon file change on the backend
   - [Nodemailer](https://nodemailer.com/about/) - Very easy library to send out emails
   - [Body-Parser](https://www.npmjs.com/package/body-parser) - A middleware to parse data from the request object to my server
