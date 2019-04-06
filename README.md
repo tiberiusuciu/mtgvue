@@ -31,12 +31,17 @@ I want to synthesize the various technologies and methodologies that I have lear
   - [Express](https://expressjs.com/) - HTTP utilities for the backend
   - [Mongoose](https://mongoosejs.com/) - ODM for my database
   - [cors](https://github.com/expressjs/cors#readme) - For simply making your life easier when testing locally
-  - [Nodemon](https://nodemon.io/) - Tool for quick reloading upon file change on the backend;
+  - [Nodemon](https://nodemon.io/) - Tool for quick reloading upon file change on the backend
+  - [Nodemailer](https://nodemailer.com/about/) - Very easy library to send out emails
+  - [Body-Parser](https://www.npmjs.com/package/body-parser) - A middleware to parse data from the request object to my server
 - Database
   - [MongoDB](https://www.mongodb.com/) - NoSQL database
 - Other
   - [MTGJSON](https://mtgjson.com/) - JSON object of remotely anything involving MTG
   - [Scryfall](https://scryfall.com/) - Great MTG website with HD image assets for the cards
+  - [Gatherer](http://gatherer.wizards.com/Pages/Default.aspx) - Offcial MTG card browser
+  - [BcryptJS](https://www.npmjs.com/package/bcryptjs) - A library to encrypt user information
+  - [Socket.io](https://socket.io/) - My favorite library for establishing a connection between multiple clients
 
 ### Run it locally
 You will need to have [MongoDB](https://www.mongodb.com/) installed on your computer
