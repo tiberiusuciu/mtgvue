@@ -66,3 +66,6 @@ AllSets.json
 
 app/package-lock.json
 api/package-lock.json
+
+# Passwords and other information that should not be available to the public
+api/Untracked/*

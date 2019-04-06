@@ -51,7 +51,7 @@ export default new Vuex.Store({
 
       axios.post('http://localhost:3000/user', {
         email: formdata.email.value,
-        username: formdata.username.value,
+        // username: formdata.username.value,
         password: hash
       }, { 
         headers: {

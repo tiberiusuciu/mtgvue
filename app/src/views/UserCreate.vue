@@ -356,12 +356,12 @@ export default {
     }
 
     .disable {
-        background: -moz-linear-gradient(left, #ccc 0%, #ccc 100%);
-        background: -webkit-gradient(left top, right top, color-stop(0%, #ccc), color-stop(100%, #ccc));
-        background: -webkit-linear-gradient(left, #ccc 0%, #ccc 100%);
-        background: -o-linear-gradient(left, #ccc 0%, #ccc 100%);
-        background: -ms-linear-gradient(left, #ccc 0%, #ccc 100%);
-        background: linear-gradient(to right, #ccc 0%, #ccc 100%);
+        background: -moz-linear-gradient(left, #dedede 0%, #dedede 100%);
+        background: -webkit-gradient(left top, right top, color-stop(0%, #dedede), color-stop(100%, #dedede));
+        background: -webkit-linear-gradient(left, #dedede 0%, #dedede 100%);
+        background: -o-linear-gradient(left, #dedede 0%, #dedede 100%);
+        background: -ms-linear-gradient(left, #dedede 0%, #dedede 100%);
+        background: linear-gradient(to right, #dedede 0%, #dedede 100%);
         /* filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34a3f7', endColorstr='#5a27e6', GradientType=1 ); */
         cursor: unset;
     }

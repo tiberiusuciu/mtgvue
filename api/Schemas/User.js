@@ -8,6 +8,8 @@ var UserSchema = new Schema({
     profile_picture: Object,
     decks: Array,
     isActive: false,
+    color: String,
+    createdAt: Date
 }, { collection: 'users' }); 
 
 module.exports = UserSchema;
