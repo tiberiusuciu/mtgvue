@@ -56,7 +56,7 @@ db.once('open', function() {
         User.find({ email: userform.email }, function (err, docs) {
             if (docs.length >= 1) {
                 // return error
-                res.send({isTaken: true});
+                res.send({errorCode: "EMAIL_TAKEN"});
                 return;
             }
             // user doesnt exist, let's create him then
@@ -113,11 +113,8 @@ db.once('open', function() {
                             if (error) {
                                 return console.log(error);
                             }
-                            // console.log('Message sent: %s', info.messageId);   
-                            // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
-                            // perform login for the user and send his token
-                            res.send({isSaved: true});
+                            res.send({errorCode: false});
                         });
                     })
                 })

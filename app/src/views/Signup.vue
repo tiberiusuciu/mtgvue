@@ -75,7 +75,7 @@
                     </template>
 
                     <template v-if="!requests.isLoading && requests.requestSent">
-                        <template v-if="!requests.isLoading && requests.requestSent && !requests.isError">
+                        <template v-if="!requests.isLoading && requests.requestSent && !requests.errorCode">
                             <h1 class="title postrequest-message">
                                 Success!
                             </h1>
@@ -85,22 +85,34 @@
                             <p class="postrequest-message-more">
                                 Please confirm it in the next 10 days, otherwise this account will be deleted 
                             </p>
-                            <div class="postrequest-message-button">
-                                Ok
-                            </div>
                         </template>
-                        <template v-if="!requests.isLoading && requests.requestSent && requests.isError">
+                        <template v-if="!requests.isLoading && requests.requestSent && requests.errorCode">
                             <h1 class="title postrequest-message">
                                 Error!
                             </h1>
+                            <p class="postrequest-message-more">
+                                There has been an error processing your request:
+                            </p>
+                            <p class="postrequest-message-more" v-if="requests.errorCode === 'EMAIL_TAKEN'" style="color: #000">
+                                The provided email is not available
+                            </p>
+                            <p class="postrequest-message-more" v-if="requests.errorCode === 'PASSWORD_INVALID'">
+                                The provided password is invalid
+                            </p>
+                            <p class="postrequest-message-more">
+                                Please try again
+                            </p>
                         </template>
+                        <div class="postrequest-message-button" @click="closeMessage">
+                            Ok
+                        </div>
                     </template>
                 </div>
             </div>
             <div class="secondary-panel">
                 <h1>Sign in</h1>
                 <h4>If you already have an account, click the button below to connect</h4>
-                <div class="login-button">
+                <div class="login-button" @click="redirectToLogin">
                     Sign In
                 </div>
             </div>
@@ -218,6 +230,18 @@ export default {
             if (this.formdata.confirmpassword.isTouched) {
                 this.applyValidationColor('confirm', this.formdata.confirmpassword.isValid)
             }
+        },
+        closeMessage() {
+            var sendToLogin = !this.requests.isLoading && this.requests.requestSent && !this.requests.errorCode;
+            console.log('abouttoclose', sendToLogin);
+            
+            this.$store.dispatch('clearPostRequestMessage');
+            if (sendToLogin) {
+                this.redirectToLogin();
+            }
+        },
+        redirectToLogin() {
+            this.$router.push('/login');
         }
     },
     computed: {

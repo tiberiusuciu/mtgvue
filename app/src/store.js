@@ -22,7 +22,7 @@ export default new Vuex.Store({
     requests: {
       requestSent: false,
       isLoading: false,
-      isError: false,
+      errorCode: ""
     }
   },
   mutations: {
@@ -56,7 +56,7 @@ export default new Vuex.Store({
       commit('requestToServer', {
         requestSent: true,
         isLoading: true,
-        isError: false
+        errorCode: false
       });
 
       // salt the password first!
@@ -70,21 +70,25 @@ export default new Vuex.Store({
       }, { 
         headers: {
           'Content-Type': 'application/json',
-        },
-        responseType: 'blob'
+        }
       })
         .then(res => {
-          // commit('addCardToHand', {card: res.data, isOpponent})
           // show a popup or something to confirm user creation
-          console.log('User has been created');
           commit('requestToServer', {
             requestSent: true,
             isLoading: false,
-            isError: false
+            errorCode: res.data.errorCode
           });
           
         })
         .catch(error => console.log(error))
+    },
+    clearPostRequestMessage ({commit}) {
+      commit('requestToServer', {
+        requestSent: false,
+        isLoading: false,
+        errorCode: false
+      });
     }
   },
   getters: {
