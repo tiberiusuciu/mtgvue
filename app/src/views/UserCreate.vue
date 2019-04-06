@@ -12,7 +12,7 @@
                                 placeholder="E-Mail"
                                 class="pill-input-tag" 
                                 v-model="formdata.email.value"
-                                @change='hasChanged("email")'
+                                @change='hasChanged("email"); validateEmail()'
                                 @blur='validateEmail()'/>
                         </div>
                         <div class="right-pill"></div>
@@ -56,7 +56,7 @@
                         </div>
                         <div class="right-pill"></div>
                     </div>
-                    <div class="submit-button" @click="submitSignup">
+                    <div class="submit-button" :class='{"disable": !isSubmitAvailable}' @click="submitSignup">
                         <!-- Disable button if form not filled up -->
                         Submit
                     </div>
@@ -98,7 +98,8 @@ export default {
                     isValid: false,
                     isTouched: false
                 },
-            }
+            },
+            isSubmitAvailable: false
         }
     },
     methods: {
@@ -129,6 +130,15 @@ export default {
                 lp.style.borderColor = "lightcoral";
                 pa.style.borderColor = "lightcoral";
                 rp.style.borderColor = "lightcoral";
+            }
+            this.checkSubmitButton();
+        },
+        checkSubmitButton() {
+            if (this.formdata.email.isValid && this.formdata.username.isValid && this.formdata.password.isValid && this.formdata.confirmpassword.isValid) {
+                this.isSubmitAvailable = true;                
+            }
+            else {
+                this.isSubmitAvailable = false;
             }
         },
         validateEmail() {
@@ -318,6 +328,7 @@ export default {
         background: -ms-linear-gradient(left, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
         background: linear-gradient(to right, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34a3f7', endColorstr='#5a27e6', GradientType=1 );
+        transition: background .25s ease-in-out;
 
     }
     .login-button {
@@ -335,5 +346,16 @@ export default {
         margin-top: 50px;
 
         border: 2px solid #ccc;
+    }
+
+    .disable {
+        background: -moz-linear-gradient(left, #ccc 0%, #ccc 100%);
+        background: -webkit-gradient(left top, right top, color-stop(0%, #ccc), color-stop(100%, #ccc));
+        background: -webkit-linear-gradient(left, #ccc 0%, #ccc 100%);
+        background: -o-linear-gradient(left, #ccc 0%, #ccc 100%);
+        background: -ms-linear-gradient(left, #ccc 0%, #ccc 100%);
+        background: linear-gradient(to right, #ccc 0%, #ccc 100%);
+        /* filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34a3f7', endColorstr='#5a27e6', GradientType=1 ); */
+        cursor: unset;
     }
 </style>
