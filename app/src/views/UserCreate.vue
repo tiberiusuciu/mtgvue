@@ -12,12 +12,13 @@
                                 placeholder="E-Mail"
                                 class="pill-input-tag" 
                                 v-model="formdata.email.value"
-                                @change='hasChanged("email"); validateEmail()'
+                                @change='hasChanged("email")'
                                 @blur='validateEmail()'/>
                         </div>
                         <div class="right-pill"></div>
                     </div>
-                    <div class="pill-input" id="username">
+                    <!-- thinking of removing username, it's one extra step that should be done after account creation -->
+                    <!-- <div class="pill-input" id="username">
                         <div class="left-pill"><i class="fas fa-user-alt"></i></div>
                         <div class="pill-input-area">
                             <input
@@ -29,13 +30,13 @@
                                 @blur='validateUsername()'/>
                         </div>
                         <div class="right-pill"></div>
-                    </div>
+                    </div> -->
                     <div class="pill-input" id="password">
                         <div class="left-pill"><i class="fas fa-key"></i></div>
                         <div class="pill-input-area">
                             <input
                                 type="password"
-                                placeholder="Password"
+                                placeholder="Password (8 char min)"
                                 class="pill-input-tag"
                                 v-model="formdata.password.value"
                                 @change='hasChanged("password")'
@@ -44,20 +45,18 @@
                         <div class="right-pill"></div>
                     </div>
                     <div class="pill-input" id="confirm">
-                        <div class="left-pill"><i class="fas fa-key"></i></div>
+                        <div class="left-pill"><i class="fas fa-check-circle"></i></div>
                         <div class="pill-input-area">
                             <input
                                 type="password"
                                 placeholder="Confirm Password"
                                 class="pill-input-tag"
                                 v-model="formdata.confirmpassword.value"
-                                @change='hasChanged("confirmpassword")'
-                                @blur='validateConfirmPassword()'/>
+                                @keyup='handler()'/>
                         </div>
                         <div class="right-pill"></div>
                     </div>
-                    <div class="submit-button" :class='{"disable": !isSubmitAvailable}' @click="submitSignup">
-                        <!-- Disable button if form not filled up -->
+                    <div class="submit-button" :class='{"disable": !isSubmitAvailable, "tooltip": isFormInvalid}' @click="submitSignup">
                         Submit
                     </div>
                 </div>
@@ -83,11 +82,11 @@ export default {
                     isValid: false,
                     isTouched: false
                 },
-                username: {
-                    value: "",
-                    isValid: false,
-                    isTouched: false
-                },
+                // username: {
+                //     value: "",
+                //     isValid: false,
+                //     isTouched: false
+                // },
                 password: {
                     value: "",
                     isValid: false,
@@ -99,13 +98,20 @@ export default {
                     isTouched: false
                 },
             },
-            isSubmitAvailable: false
+            isSubmitAvailable: false,
+            isFormInvalid: false
         }
     },
     methods: {
         submitSignup() {
-            console.log(this.formdata);
-            this.$store.dispatch('onCreateUser', this.formdata);
+            // console.log(this.formdata);
+            if (this.isSubmitAvailable) {
+                this.$store.dispatch('onCreateUser', this.formdata);
+            }
+        },
+        handler() {
+            this.hasChanged("confirmpassword");
+            this.validateConfirmPassword();
         },
         hasChanged(key) {
             this.formdata[key].isTouched = true;
@@ -134,11 +140,14 @@ export default {
             this.checkSubmitButton();
         },
         checkSubmitButton() {
-            if (this.formdata.email.isValid && this.formdata.username.isValid && this.formdata.password.isValid && this.formdata.confirmpassword.isValid) {
-                this.isSubmitAvailable = true;                
+            //this.formdata.username.isValid
+            if (this.formdata.email.isValid && this.formdata.password.isValid && this.formdata.confirmpassword.isValid) {
+                this.isSubmitAvailable = true;
+                this.isFormInvalid = false;              
             }
             else {
                 this.isSubmitAvailable = false;
+                this.isFormInvalid = true;
             }
         },
         validateEmail() {
@@ -150,16 +159,16 @@ export default {
                 this.applyValidationColor('email', this.formdata.email.isValid)
             }
         },
-        validateUsername() {
-            // Making sure username has no special characters, and it's not empty either
-            this.formdata.username.value = this.formdata.username.value.trim();
-            var format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
-            this.formdata.username.isValid = !format.test(this.formdata.username.value) && !this.formdata.username.value.length == 0;
+        // validateUsername() {
+        //     // Making sure username has no special characters, and it's not empty either
+        //     this.formdata.username.value = this.formdata.username.value.trim();
+        //     var format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+        //     this.formdata.username.isValid = !format.test(this.formdata.username.value) && !this.formdata.username.value.length == 0;
 
-            if (this.formdata.username.isTouched) {
-                this.applyValidationColor('username', this.formdata.username.isValid)
-            }
-        },
+        //     if (this.formdata.username.isTouched) {
+        //         this.applyValidationColor('username', this.formdata.username.isValid)
+        //     }
+        // },
         validatePassword() {
             // Making sure the password is at least 8 character (really standard, nothing fancy)
             this.formdata.password.isValid = this.formdata.password.value.length >= 8;
@@ -199,7 +208,7 @@ export default {
         width: 100%;
         display: inline-block;
         position: relative;
-        margin-top: 65px;
+        margin-top: 105px;
     }
     .bg {
         position: relative;
@@ -328,8 +337,6 @@ export default {
         background: -ms-linear-gradient(left, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
         background: linear-gradient(to right, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34a3f7', endColorstr='#5a27e6', GradientType=1 );
-        transition: background .25s ease-in-out;
-
     }
     .login-button {
         cursor: pointer;
