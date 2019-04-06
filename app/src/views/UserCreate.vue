@@ -64,7 +64,7 @@
             </div>
             <div class="secondary-panel">
                 <h1>Sign in</h1>
-                <h4>If you already have an account, click right here to connect</h4>
+                <h4>If you already have an account, click the button below to connect</h4>
                 <div class="login-button">
                     Sign In
                 </div>
@@ -228,7 +228,7 @@ export default {
         display: inline-block;
         width: 50%;
         color: ghostwhite;
-        padding: 30px 0px 0px 60px;
+        padding: 30px 60px 0px 60px;
         box-sizing: border-box;
         vertical-align: top;
         margin-top: 100px;
