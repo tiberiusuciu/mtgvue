@@ -133,7 +133,7 @@ body {
   transition-property: line-height;
   transition-duration: .25s;
   transition-timing-function: ease-in-out;
-  z-index: 1;
+  z-index: 2;
 }
 
 .burger-button:hover i{
