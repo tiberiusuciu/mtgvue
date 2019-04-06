@@ -57,6 +57,7 @@
                         <div class="right-pill"></div>
                     </div>
                     <div class="submit-button" @click="submitSignup">
+                        <!-- Disable button if form not filled up -->
                         Submit
                     </div>
                 </div>
