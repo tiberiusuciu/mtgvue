@@ -3,15 +3,23 @@
         <div class="input-area">
             <div class="verticalalign">
                 <h1 class="title">Login</h1>
-                <div class="formarea usernameinput">
+                <div class="formarea" id="email">
                     <div class="left-pill"><i class="fas fa-envelope"></i></div>
-                    <input type="text" placeholder="E-Mail">
+                    <input
+                        type="text"
+                        placeholder="E-Mail"
+                        v-model="formdata.email"
+                        @input="applyColoration">
                 </div>
-                <div class="formarea passwordinput">
+                <div class="formarea" id="password">
                     <div class="left-pill"><i class="fas fa-key"></i></div>
-                    <input type="password" placeholder="Password">
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        v-model="formdata.password"
+                        @input="applyColoration">
                 </div>
-                <div class="submit-button" @click="login">
+                <div class="submit-button" :class="{'is-active': formdata.email.length > 0 && formdata.password.length > 0 }" @click="login">
                     Submit
                 </div>
             </div>
@@ -20,7 +28,7 @@
                     Don't have an account? <span class="additional-button" @click="$router.push('/signup')">Sign up</span>
                 </div>
                 <div>
-                    Forgot your password? <span class="additional-button">Click here</span>
+                    Forgot your password? <span class="additional-button" @click="$router.push('/forgotpassword')">Click here</span>
                 </div>
             </div>
         </div>
@@ -30,12 +38,65 @@
 
 <script>
     export default {
+        data() {
+            return {
+                formdata: {
+                    email: "",
+                    password: ""
+                },
+                isSubmitAvailable: false,
+                isFormInvalid: false
+            }
+        },
         methods: {
             login() {
-                console.log('login performed');
+                console.log('login performed');  
+            },
+            applyColoration() {
                 
+                var lp_email =  document.querySelector('#email .left-pill');
+                var lp_password =  document.querySelector('#password .left-pill');
+                var input_email = document.querySelector('#email input');
+                var input_password = document.querySelector('#password input');
+                var i_email = document.querySelector('#email i');
+                var i_password = document.querySelector('#password i');
+
+                if (this.formdata.email.length > 0) {
+                    lp_email.style.color = "dodgerblue";
+                    input_email.style.color = "dodgerblue";
+                    i_email.style.color = "dodgerblue";
+                    lp_email.style.borderColor = "dodgerblue";
+                    input_email.style.borderColor = "dodgerblue";
+                }
+                else {
+                    lp_email.style.color = "#ccc";
+                    input_email.style.color = "#aaa";
+                    i_email.style.color = "#ccc";
+                    lp_email.style.borderColor = "#ccc";
+                    input_email.style.borderColor = "#ccc";
+                }
+
+                if (this.formdata.password.length > 0) {
+                    lp_password.style.color = "dodgerblue";
+                    i_password.style.color = "dodgerblue";
+                    input_password.style.color = "dodgerblue";
+                    lp_password.style.borderColor = "dodgerblue";
+                    input_password.style.borderColor = "dodgerblue";
+                }
+                else {
+                    lp_password.style.color = "#ccc";
+                    i_password.style.color = "#ccc";
+                    input_password.style.color = "#aaa";
+                    lp_password.style.borderColor = "#ccc";
+                    input_password.style.borderColor = "#ccc";
+                }
             }
-        },   
+        },
+        computed: {
+            requests() {
+                return this.$store.getters.requests
+            }
+        }
     }
 </script>
 
@@ -60,23 +121,19 @@
         background-position-y: 60%;
     }
     .title {
-        /* margin-top: 200px; */
         padding-left: 165px;
         color: #888;
         font-weight: lighter;
     }
     .formarea {
-        /* padding-left: 100px; */
         margin-top: 30px;
         height: 60px;
         box-sizing: border-box;
-        /* width: 450px; */
         display: flex;
         margin: auto;
         margin-top: 25px;
         width: 60%;
     }
-
     .formarea input {
         height: 60px;
         border: none;
@@ -96,12 +153,10 @@
         line-height: 58px;
         color: #aaa;
         font-size: 22px;
-        
     }
     .formarea input::placeholder {
         color: #aaa;
     }
-
     .left-pill {
         width: 70px;
         height: 60px;
@@ -116,21 +171,21 @@
         background-color: ghostwhite;
         text-align: center;
     }
-
     .submit-button {
-        cursor: pointer;
         border-radius: 35px;
         text-align: center;
         color: ghostwhite;
         font-weight: bold;
-
         height: 60px;
         display: block;
         margin: auto;
         width: 60%;
         margin-top: 25px;
         line-height: 60px;
-
+        background: #dedede
+    }
+    .is-active {
+        cursor: pointer;
         background: rgba(52,163,247,1);
         background: -moz-linear-gradient(left, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
         background: -webkit-gradient(left top, right top, color-stop(0%, rgba(52,163,247,1)), color-stop(100%, rgba(90,39,230,1)));
@@ -140,11 +195,9 @@
         background: linear-gradient(to right, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34a3f7', endColorstr='#5a27e6', GradientType=1 );
     }
-
-    .submit-button:hover {
+    .is-active:hover {
         opacity: .8;
     }
-
     .verticalalign {
         position: absolute;
         width: 700px;

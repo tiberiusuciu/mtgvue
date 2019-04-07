@@ -35,7 +35,7 @@ db.once('open', function() {
     app.get('/randomcard', (req, res) => {
         var Card = mongoose.model('Card', CardSchema);
 
-        Card.count().exec((err, count) => {
+        Card.countDocuments().exec((err, count) => {
             
             // Get a random entry
             var random = Math.floor(Math.random() * count)
