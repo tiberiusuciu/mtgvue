@@ -9,7 +9,7 @@
                         type="text"
                         placeholder="E-Mail"
                         v-model="formdata.email"
-                        @input="applyColoration">
+                        @input="applyColoration('email')">
                 </div>
                 <div class="formarea" id="password">
                     <div class="left-pill"><i class="fas fa-key"></i></div>
@@ -17,7 +17,7 @@
                         type="password"
                         placeholder="Password"
                         v-model="formdata.password"
-                        @input="applyColoration">
+                        @input="applyColoration('password')">
                 </div>
                 <div class="submit-button" :class="{'is-active': formdata.email.length > 0 && formdata.password.length > 0 }" @click="login">
                     Submit
@@ -45,51 +45,37 @@
                     password: ""
                 },
                 isSubmitAvailable: false,
-                isFormInvalid: false
             }
         },
         methods: {
             login() {
                 console.log('login performed');  
+                if (this.isSubmitAvailable) {
+                    this.$store.dispatch('onLogin', this.formdata);
+                }
             },
-            applyColoration() {
+            applyColoration(id) {
                 
-                var lp_email =  document.querySelector('#email .left-pill');
-                var lp_password =  document.querySelector('#password .left-pill');
-                var input_email = document.querySelector('#email input');
-                var input_password = document.querySelector('#password input');
-                var i_email = document.querySelector('#email i');
-                var i_password = document.querySelector('#password i');
+                var lp =  document.querySelector('#' + id + ' .left-pill');
+                var input = document.querySelector('#' + id + ' input');
+                var i = document.querySelector('#' + id + ' i');
 
                 if (this.formdata.email.length > 0) {
-                    lp_email.style.color = "dodgerblue";
-                    input_email.style.color = "dodgerblue";
-                    i_email.style.color = "dodgerblue";
-                    lp_email.style.borderColor = "dodgerblue";
-                    input_email.style.borderColor = "dodgerblue";
+                    lp.style.color = "dodgerblue";
+                    input.style.color = "dodgerblue";
+                    i.style.color = "dodgerblue";
+                    lp.style.borderColor = "dodgerblue";
+                    input.style.borderColor = "dodgerblue";
                 }
                 else {
-                    lp_email.style.color = "#ccc";
-                    input_email.style.color = "#aaa";
-                    i_email.style.color = "#ccc";
-                    lp_email.style.borderColor = "#ccc";
-                    input_email.style.borderColor = "#ccc";
+                    lp.style.color = "#ccc";
+                    input.style.color = "#aaa";
+                    i.style.color = "#ccc";
+                    lp.style.borderColor = "#ccc";
+                    input.style.borderColor = "#ccc";
                 }
 
-                if (this.formdata.password.length > 0) {
-                    lp_password.style.color = "dodgerblue";
-                    i_password.style.color = "dodgerblue";
-                    input_password.style.color = "dodgerblue";
-                    lp_password.style.borderColor = "dodgerblue";
-                    input_password.style.borderColor = "dodgerblue";
-                }
-                else {
-                    lp_password.style.color = "#ccc";
-                    i_password.style.color = "#ccc";
-                    input_password.style.color = "#aaa";
-                    lp_password.style.borderColor = "#ccc";
-                    input_password.style.borderColor = "#ccc";
-                }
+                this.isSubmitAvailable = this.formdata.email.length > 0 && this.formdata.password.length > 0;
             }
         },
         computed: {
