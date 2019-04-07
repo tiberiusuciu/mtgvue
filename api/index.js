@@ -3,6 +3,8 @@ const express = require('express')
 const nodemailer = require("nodemailer");
 var bodyParser = require('body-parser')
 var bcrypt = require('bcryptjs');
+const fs   = require('fs');
+const jwt  = require('jsonwebtoken');
 const cors = require('cors')
 
 const app = express()
@@ -123,18 +125,36 @@ db.once('open', function() {
     });
 
     app.get('/confirmuser', (req, res) => {
-        var User = mongoose.model('User', UserSchema);        
-        var validatedEmail = "";
+        var User = mongoose.model('User', UserSchema);
         User.find({} , (err, users) => {
             if(err) console.log(err);
             users.map(user => {
-                //Do somethign with the user
-                
                 if (bcrypt.compareSync(user.email, req.query.hash)) {
                     validatedEmail = user.email;
                     user.isActive = true;
                     user.save();
                     return;
+                }
+            })
+            res.redirect('http://localhost:8080/login')
+        })
+    });
+
+    app.post('/login', (req, res) => {
+        console.log(req.body);
+        
+        var User = mongoose.model('User', UserSchema);
+        User.find({} , (err, users) => {
+            if(err) console.log(err);
+            users.map(user => {
+                if (user.email === req.body.email) {
+                    console.log('correct email');
+                    if (bcrypt.compareSync(req.body.password, user.password)) {
+                        
+                        console.log('We have signed in!');
+                        
+                        return;
+                    }
                 }
             })
             res.redirect('http://localhost:8080/login')

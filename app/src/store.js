@@ -89,6 +89,37 @@ export default new Vuex.Store({
         isLoading: false,
         errorCode: false
       });
+    },
+    onLogin ({commit}, formdata) {
+      commit('requestToServer', {
+        requestSent: true,
+        isLoading: true,
+        errorCode: false
+      });
+
+      // salt the password first!
+      // var salt = bcrypt.genSaltSync(10);
+      // var hash = bcrypt.hashSync(formdata.password, salt);
+
+      axios.post('http://localhost:3000/login', {
+        email: formdata.email,
+        password: formdata.password
+        // password: hash
+      }, { 
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+        .then(res => {
+          // show a popup or something to confirm user creation
+          commit('requestToServer', {
+            requestSent: true,
+            isLoading: false,
+            errorCode: res.data.errorCode
+          });
+          
+        })
+        .catch(error => console.log(error))
     }
   },
   getters: {
