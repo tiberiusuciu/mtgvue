@@ -11,14 +11,33 @@
                     <div class="left-pill"><i class="fas fa-key"></i></div>
                     <input type="password" placeholder="Password">
                 </div>
-                <div class="submit-button" :class='{"disable": !isSubmitAvailable, "tooltip": isFormInvalid}' @click="submitSignup">
+                <div class="submit-button" @click="login">
                     Submit
+                </div>
+            </div>
+            <div class="more-options">
+                <div>
+                    Don't have an account? <span class="additional-button" @click="$router.push('/signup')">Sign up</span>
+                </div>
+                <div>
+                    Forgot your password? <span class="additional-button">Click here</span>
                 </div>
             </div>
         </div>
         <div class="bg"></div>
     </div>
 </template>
+
+<script>
+    export default {
+        methods: {
+            login() {
+                console.log('login performed');
+                
+            }
+        },   
+    }
+</script>
 
 <style scoped>
     .container {
@@ -131,5 +150,21 @@
         width: 700px;
         top: 50%;
         transform: translateY(-65%);
+    }
+    .more-options {
+        position: absolute;
+        bottom: 30px;
+        text-align: center;
+        width: 700px;
+        color: #aaa;
+        letter-spacing: 1px;
+        font-size: 12px;
+    }
+    .additional-button {
+        color: dodgerblue;
+        cursor: pointer;
+    }
+    .additional-button:hover {
+        text-decoration: underline;
     }
 </style>

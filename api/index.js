@@ -137,7 +137,7 @@ db.once('open', function() {
                     return;
                 }
             })
-            res.redirect('http://localhost:8080/')
+            res.redirect('http://localhost:8080/login')
         })
     });
     
