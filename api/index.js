@@ -179,14 +179,14 @@ db.once('open', function() {
                     }
                     else {
                         res.send({
-                            errorCode: "ERROR_LOGIN"
+                            errorCode: "ERROR_LOGIN_CREDENTIALS"
                         })
                     }
                 }
             })
             if (notFound) {
                 res.send({
-                    errorCode: "ERROR_LOGIN"
+                    errorCode: "ERROR_LOGIN_CREDENTIALS"
                 })
             }
         })

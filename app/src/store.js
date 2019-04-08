@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import router from './router'
 
 import axios from 'axios';
 const bcrypt = require('bcryptjs');
@@ -22,7 +23,7 @@ export default new Vuex.Store({
     requests: {
       requestSent: false,
       isLoading: false,
-      errorCode: ""
+      errorCode: false
     },
     token: {}
   },
@@ -116,16 +117,21 @@ export default new Vuex.Store({
         }
       })
         .then(res => {
-          // show a popup or something to confirm user creation
-          console.log('res', res.data);
-
-          commit('requestToServer', {
-            requestSent: true,
-            isLoading: false,
-            errorCode: res.data.errorCode
-          });
           if (!res.data.errorCode) {
+            commit('requestToServer', {
+              requestSent: false,
+              isLoading: false,
+              errorCode: res.data.errorCode
+            });
             commit('userHasLoggedIn', { token: res.data.token, user: res.data.user });
+            router.push('/');
+          }
+          else {
+            commit('requestToServer', {
+              requestSent: true,
+              isLoading: false,
+              errorCode: res.data.errorCode
+            });
           }
         })
         .catch(error => console.log(error))
