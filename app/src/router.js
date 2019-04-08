@@ -8,6 +8,7 @@ import Game from './views/Game.vue'
 import Signup from './views/Signup.vue'
 import Login from './views/Login.vue'
 import UserSettings from './views/UserSettings.vue'
+import Username from './views/Username.vue'
 import NotFound from './views/NotFound.vue'
 
 Vue.use(Router)
@@ -74,6 +75,22 @@ const router = new Router({
       }
     },
     {
+      path: '/username',
+      name: 'username',
+      component: Username,
+      beforeEnter: (to, from, next) => {
+        if (!store.getters.user) {
+          router.push('/login')
+        }
+        else if(store.getters.user.username) {
+          router.push('/')
+        }
+        else {
+          next();
+        }
+      }
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting
@@ -88,5 +105,16 @@ const router = new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (store.getters.user && to.name !== 'username') {
+    if (!store.getters.user.username) {
+      router.push('/username')
+    }
+  }
+  else {
+    next();
+  }
+});
 
 export default router;
