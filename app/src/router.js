@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
+import store from './store'
+
 import Home from './views/Home.vue'
 import Game from './views/Game.vue'
 import Signup from './views/Signup.vue'
@@ -9,7 +12,7 @@ import NotFound from './views/NotFound.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -21,22 +24,54 @@ export default new Router({
     {
       path: '/signup',
       name: 'signup',
-      component: Signup
+      component: Signup,
+      beforeEnter: (to, from, next) => {
+        if (store.getters.user) {
+          router.push('/')
+        }
+        else {
+          next();
+        }
+      }
     },
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: Login,
+      beforeEnter: (to, from, next) => {
+        if (store.getters.user) {
+          router.push('/')
+        }
+        else {
+          next();
+        }
+      }
     },
     {
       path: '/game',
       name: 'game',
-      component: Game
+      component: Game,
+      beforeEnter: (to, from, next) => {
+        if (!store.getters.user) {
+          router.push('/login')
+        }
+        else {
+          next();
+        }
+      }
     },
     {
       path: '/usersettings',
       name: 'usersettings',
-      component: UserSettings
+      component: UserSettings,
+      beforeEnter: (to, from, next) => {
+        if (!store.getters.user) {
+          router.push('/login')
+        }
+        else {
+          next();
+        }
+      }
     },
     {
       path: '/about',
@@ -53,3 +88,5 @@ export default new Router({
     }
   ]
 })
+
+export default router;
