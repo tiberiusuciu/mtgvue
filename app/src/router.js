@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import Game from './views/Game.vue'
 import Signup from './views/Signup.vue'
 import Login from './views/Login.vue'
+import UserSettings from './views/UserSettings.vue'
 import NotFound from './views/NotFound.vue'
 
 Vue.use(Router)
@@ -31,6 +32,11 @@ export default new Router({
       path: '/game',
       name: 'game',
       component: Game
+    },
+    {
+      path: '/usersettings',
+      name: 'usersettings',
+      component: UserSettings
     },
     {
       path: '/about',

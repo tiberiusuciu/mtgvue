@@ -4,8 +4,9 @@
       <div id="nav" v-if="showMenu">
         <div class="menu">
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/" class="first-item" exact>Home</router-link>
-          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/login">Login</router-link>
-          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/signup">Sign Up</router-link>
+          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/usersettings">Settings</router-link>
+          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/login" v-if="!user">Login</router-link>
+          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/signup" v-if="!user">Sign Up</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/game">Game</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/about">About</router-link>
         </div>
@@ -67,6 +68,9 @@
     computed: {
       showMenu() {
         return this.$store.getters.showMenu
+      },
+      user() {
+        return this.$store.getters.user
       }
     }, 
   }

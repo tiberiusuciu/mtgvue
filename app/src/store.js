@@ -9,7 +9,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     showMenu: false,
-    user: {},
+    user: null,
     game: {
       player: {
         health: 20,
@@ -23,7 +23,8 @@ export default new Vuex.Store({
       requestSent: false,
       isLoading: false,
       errorCode: ""
-    }
+    },
+    token: {}
   },
   mutations: {
     toggleMenu (state) {
@@ -36,6 +37,10 @@ export default new Vuex.Store({
     },
     requestToServer (state, requests) {
       state.requests = requests
+    },
+    userHasLoggedIn (state, { token, user }) {
+      state.token = token;
+      state.user = user;
     }
   },
   actions: {
@@ -112,14 +117,31 @@ export default new Vuex.Store({
       })
         .then(res => {
           // show a popup or something to confirm user creation
+          console.log('res', res.data);
+
           commit('requestToServer', {
             requestSent: true,
             isLoading: false,
             errorCode: res.data.errorCode
           });
-          
+          if (!res.data.errorCode) {
+            commit('userHasLoggedIn', { token: res.data.token, user: res.data.user });
+          }
         })
         .catch(error => console.log(error))
+    },
+    onUserUpdate({commit, state }) {
+      axios.put('http://localhost:3000/user', {}, { 
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + state.token
+        }
+      }).then(res => {
+        // show a popup or something to confirm user creation
+        console.log('res', res.data);
+        
+      })
+      .catch(error => console.log(error))
     }
   },
   getters: {
@@ -134,6 +156,9 @@ export default new Vuex.Store({
     },
     requests (state) {
       return state.requests
+    },
+    token (state) {
+      return state.token
     }
   }
 })

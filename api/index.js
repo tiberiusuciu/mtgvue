@@ -3,7 +3,6 @@ const express = require('express')
 const nodemailer = require("nodemailer");
 var bodyParser = require('body-parser')
 var bcrypt = require('bcryptjs');
-const fs   = require('fs');
 const jwt  = require('jsonwebtoken');
 const cors = require('cors')
 
@@ -12,7 +11,7 @@ const app = express()
 var CardSchema = require('./Schemas/Card');
 var UserSchema = require('./Schemas/User');
 
-const { emailCredentials } = require('./Untracked/credentials');
+const storedCredentials = require('./Untracked/credentials');
 
 app.use(cors({credentials: true, origin: true}))
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -30,8 +29,6 @@ db.once('open', function() {
     console.log("Connected to Database!");
     
     app.get('/', (req, res) => {
-        console.log("lel");
-        
         res.send('Hello World!')
     })
     app.get('/randomcard', (req, res) => {
@@ -93,8 +90,8 @@ db.once('open', function() {
                             port: 587,
                             secure: false, // true for 465, false for other ports
                             auth: {
-                                user: emailCredentials.email, // generated ethereal user
-                                pass: emailCredentials.password  // generated ethereal password
+                                user: storedCredentials.emailCredentials.email, // generated ethereal user
+                                pass: storedCredentials.emailCredentials.password  // generated ethereal password
                             },
                             tls:{
                                 rejectUnauthorized:false
@@ -141,25 +138,102 @@ db.once('open', function() {
     });
 
     app.post('/login', (req, res) => {
-        console.log(req.body);
-        
         var User = mongoose.model('User', UserSchema);
+        var notFound = true;
         User.find({} , (err, users) => {
-            if(err) console.log(err);
+            if(err) {
+                console.log(err);
+                res.send({
+                    errorCode: "ERROR_LOGIN"
+                })
+                return;
+            }
             users.map(user => {
                 if (user.email === req.body.email) {
-                    console.log('correct email');
+                    notFound = false;
                     if (bcrypt.compareSync(req.body.password, user.password)) {
+                        // Alternatively, we could send the entire object, minus the password, without surgically selecting each field
+                        const userNoPassword = {
+                            color: user.color,
+                            createdAt: user.createdAt,
+                            decks: user.decks,
+                            email: user.email,
+                            isActive: user.isActive,
+                            profile_picture: user.profile_picture,
+                            id: user._id
+                        };
                         
-                        console.log('We have signed in!');
-                        
-                        return;
+                        jwt.sign({user: userNoPassword}, storedCredentials.jwt.secretkey, { expiresIn: '1d' }, (err, token) => {
+                            if (err) {
+                                console.log(err); 
+                            }
+                            else {
+                                error = false;
+                                res.send({
+                                    token,
+                                    errorCode: false,
+                                    user: userNoPassword
+                                })
+                            }
+                        })
+                    }
+                    else {
+                        res.send({
+                            errorCode: "ERROR_LOGIN"
+                        })
                     }
                 }
             })
-            res.redirect('http://localhost:8080/login')
+            if (notFound) {
+                res.send({
+                    errorCode: "ERROR_LOGIN"
+                })
+            }
         })
     });
+
+    app.put('/user', verifyToken, (req, res) => {
+        jwt.verify(req.token, storedCredentials.jwt.secretkey, (err, authData) => {
+            if (err) {
+                res.send({
+                    errorCode: "TOKEN_INVALID"
+                })
+            }
+            else {
+                res.send({
+                    errorCode: false,
+                    authData
+                })
+            }
+        });
+    });
+
+    // Format of token
+    // Authorization: Bearer <access_token>
+
+    // Verify Token
+    function verifyToken(req, res, next) {
+        // Get auth header value
+        const bearerHeader = req.headers['authorization'];
+        // Check if bearer is undefined
+        if (typeof bearerHeader !== 'undefined') {
+            // Split at the space
+            const bearer = bearerHeader.split(' ');
+            // Get Token from array
+            const bearerToken = bearer[1];
+            // Set the token
+            req.token = bearerToken;
+            // Next middleware
+            next();
+        }
+        else {
+            // res.redirect('http://localhost:8080/login')
+            // res.sendStatus(403);
+            res.send({
+                errorCode: "TOKEN_INVALID at verification"
+            })
+        }
+    }
     
     app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 })
