@@ -20,14 +20,36 @@ const router = new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      beforeEnter: (to, from, next) => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        console.log('entering');
+        
+        if (store.getters.user) {
+          if (store.getters.user.username) {
+            next();
+          }
+          else {
+            router.push('/username')
+          }
+        }
+        if (user) {
+          if (user.username) {
+            router.push('/')
+          }
+          else {
+            router.push('/username')
+          }
+        }
+      }
     },
     {
       path: '/signup',
       name: 'signup',
       component: Signup,
       beforeEnter: (to, from, next) => {
-        if (store.getters.user) {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (store.getters.user || user) {
           router.push('/')
         }
         else {
@@ -40,7 +62,8 @@ const router = new Router({
       name: 'login',
       component: Login,
       beforeEnter: (to, from, next) => {
-        if (store.getters.user) {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (store.getters.user || user) {
           router.push('/')
         }
         else {
@@ -79,8 +102,15 @@ const router = new Router({
       name: 'username',
       component: Username,
       beforeEnter: (to, from, next) => {
+        const user = JSON.parse(localStorage.getItem('user'));
+
         if (!store.getters.user) {
-          router.push('/login')
+          if (!user) {
+            router.push('/login')
+          }
+          else {
+            next();
+          }
         }
         else if(store.getters.user.username) {
           router.push('/')

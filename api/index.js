@@ -140,56 +140,129 @@ db.once('open', function() {
     app.post('/login', (req, res) => {
         var User = mongoose.model('User', UserSchema);
         var notFound = true;
-        User.find({} , (err, users) => {
-            if(err) {
-                console.log(err);
-                res.send({
-                    errorCode: "ERROR_LOGIN"
-                })
-                return;
-            }
-            users.map(user => {
-                if (user.email === req.body.email) {
-                    notFound = false;
-                    if (bcrypt.compareSync(req.body.password, user.password)) {
-                        // Alternatively, we could send the entire object, minus the password, without surgically selecting each field
-                        const userNoPassword = {
-                            color: user.color,
-                            createdAt: user.createdAt,
-                            decks: user.decks,
-                            email: user.email,
-                            isActive: user.isActive,
-                            profile_picture: user.profile_picture,
-                            id: user._id
-                        };
-                        
-                        jwt.sign({user: userNoPassword}, storedCredentials.jwt.secretkey, { expiresIn: '1d' }, (err, token) => {
-                            if (err) {
-                                console.log(err); 
-                            }
-                            else {
-                                error = false;
-                                res.send({
-                                    token,
-                                    errorCode: false,
-                                    user: userNoPassword
-                                })
-                            }
-                        })
+        
+        // console.log('checking for token');
+        // check for token for autologin
+        if (req.body.token) {
+            // console.log('token found, verifying');
+            
+            jwt.verify(req.body.token, storedCredentials.jwt.secretkey, (err, authData) => {
+                if (err) {
+                    res.send({
+                        errorCode: "TOKEN_INVALID"
+                    })
+                }
+                else {
+                    // console.log('token valid, lets locate user', authData);
+
+                    // checking for expiration
+                    if (authData['iat'] >= authData['exp']) {
+                        // console.log('token expired!');
                     }
                     else {
-                        res.send({
-                            errorCode: "ERROR_LOGIN_CREDENTIALS"
-                        })
+                        // console.log('token not expired yet');
+                        const email = authData.user.email;
+    
+                        if (email) {
+                            // go fetch the user
+                            // console.log('found an email in the token', email);
+
+                            User.find({} , (err, users) => {
+                                if(err) {
+                                    console.log(err);
+                                    res.send({
+                                        errorCode: "ERROR_LOGIN"
+                                    })
+                                    return;
+                                }
+                                users.map(user => {
+                                    if (user.email === email) {
+                                        notFound = false;
+                                        // Alternatively, we could send the entire object, minus the password, without surgically selecting each field
+                                        const userNoPassword = {
+                                            color: user.color,
+                                            createdAt: user.createdAt,
+                                            decks: user.decks,
+                                            email: user.email,
+                                            isActive: user.isActive,
+                                            profile_picture: user.profile_picture,
+                                            id: user._id
+                                        };
+
+                                        res.send({
+                                            errorCode: false,
+                                            user: userNoPassword
+                                        })
+                                    }
+                                })
+                                if (notFound) {
+                                    res.send({
+                                        errorCode: "ERROR_LOGIN_CREDENTIALS"
+                                    })
+                                }
+                            });
+                        }
                     }
                 }
-            })
-            if (notFound) {
-                res.send({
-                    errorCode: "ERROR_LOGIN_CREDENTIALS"
+            });
+
+        }
+        else {
+            User.find({} , (err, users) => {
+                if(err) {
+                    console.log(err);
+                    res.send({
+                        errorCode: "ERROR_LOGIN"
+                    })
+                    return;
+                }
+                users.map(user => {
+                    if (user.email === req.body.email) {
+                        notFound = false;
+                        if (bcrypt.compareSync(req.body.password, user.password)) {
+                            // Alternatively, we could send the entire object, minus the password, without surgically selecting each field
+                            const userNoPassword = {
+                                color: user.color,
+                                createdAt: user.createdAt,
+                                decks: user.decks,
+                                email: user.email,
+                                isActive: user.isActive,
+                                profile_picture: user.profile_picture,
+                                id: user._id
+                            };
+    
+                            const userPayload = {
+                                email: user.email
+                            }
+                            
+                            jwt.sign({user: userPayload}, storedCredentials.jwt.secretkey, { expiresIn: '1d' }, (err, token) => {
+                                if (err) {
+                                    console.log(err); 
+                                }
+                                else {
+                                    error = false;
+                                    res.send({
+                                        token,
+                                        errorCode: false,
+                                        user: userNoPassword
+                                    })
+                                }
+                            })
+                        }
+                        else {
+                            res.send({
+                                errorCode: "ERROR_LOGIN_CREDENTIALS"
+                            })
+                        }
+                    }
                 })
-            }
-        })
+                if (notFound) {
+                    res.send({
+                        errorCode: "ERROR_LOGIN_CREDENTIALS"
+                    })
+                }
+            })
+        }
     });
 
     app.put('/user', verifyToken, (req, res) => {

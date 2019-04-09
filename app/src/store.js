@@ -42,6 +42,12 @@ export default new Vuex.Store({
     userHasLoggedIn (state, { token, user }) {
       state.token = token;
       state.user = user;
+    },
+    applyUser (state, user) {
+      state.user = user;
+    },
+    applyToken (state, token) {
+      state.token = token
     }
   },
   actions: {
@@ -103,14 +109,9 @@ export default new Vuex.Store({
         errorCode: false
       });
 
-      // salt the password first!
-      // var salt = bcrypt.genSaltSync(10);
-      // var hash = bcrypt.hashSync(formdata.password, salt);
-
       axios.post('http://localhost:3000/login', {
         email: formdata.email,
         password: formdata.password
-        // password: hash
       }, { 
         headers: {
           'Content-Type': 'application/json',
@@ -124,6 +125,13 @@ export default new Vuex.Store({
               errorCode: res.data.errorCode
             });
             commit('userHasLoggedIn', { token: res.data.token, user: res.data.user });
+
+            console.log('token', res.data.token);
+            console.log('user', res.data.user);
+            
+            var userString = JSON.stringify(res.data.user);
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('user', userString);
             router.push('/');
           }
           else {
@@ -135,6 +143,54 @@ export default new Vuex.Store({
           }
         })
         .catch(error => console.log(error))
+    },
+    tryAutoLogin({commit}) {
+      console.log('autolog');
+
+      const user = JSON.parse(localStorage.getItem('user'));
+      commit('applyUser', user);
+
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.log('no token found');
+        return;
+      }
+
+      // if token found, go get user from api
+      axios.post('http://localhost:3000/login', {
+        token
+      }, { 
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      .then(res => {
+        if (!res.data.errorCode) {
+          commit('requestToServer', {
+            requestSent: false,
+            isLoading: false,
+            errorCode: res.data.errorCode
+          });
+          commit('userHasLoggedIn', { user: res.data.user, token });
+
+          var userString = JSON.stringify(res.data.user);
+          localStorage.setItem('user', userString);
+          if (res.data.user.username) {
+            router.push('/');
+          }
+          else {
+            router.push('/username');
+          }
+        }
+        else {
+          commit('requestToServer', {
+            requestSent: true,
+            isLoading: false,
+            errorCode: res.data.errorCode
+          });
+        }
+      })
+      .catch(error => console.log(error))
     },
     onUserUpdate({commit, state }) {
       axios.put('http://localhost:3000/user', {}, { 

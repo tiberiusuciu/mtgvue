@@ -72,7 +72,10 @@
       user() {
         return this.$store.getters.user
       }
-    }, 
+    },
+    created() {
+      this.$store.dispatch('tryAutoLogin')
+    },
   }
 </script>
 
