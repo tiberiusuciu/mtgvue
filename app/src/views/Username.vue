@@ -5,15 +5,18 @@
                 <h1 class="title">Create a username</h1>
                 <p class="sub-title">You are almost done!</p>
                 <p class="sub-title">Set your username for others to identify you!</p>
-                <div class="formarea" id="username">
+                <div class="formarea" id="username" :class="{
+                        'valid': requests.requestSent && !requests.isLoading && !requests.errorCode,
+                        'invalid': requests.requestSent && !requests.isLoading && requests.errorCode
+                    }">
                     <div class="left-pill">
-                        <template v-if="false">
+                        <template v-if="requests.requestSent && !requests.isLoading && !requests.errorCode">
                             <i class="fas fa-check"></i>
                         </template>
-                        <template v-if="false">
+                        <template v-if="requests.requestSent && !requests.isLoading && requests.errorCode">
                             <i class="fas fa-times"></i>
                         </template>
-                        <template v-if="true">
+                        <template v-if="!requests.requestSent && !requests.isLoading && !requests.errorCode">
                             <i class="fas fa-user"></i>
                         </template>
                     </div>
@@ -21,9 +24,11 @@
                         type="text"
                         placeholder="username"
                         v-model="formdata.username"
-                        @input="applyColoration('username')">
+                        @input="applyColoration('username')"
+                        :disabled="requests.requestSent && !requests.isLoading && !requests.errorCode">
                     <div class="right-pill" @click="verify" :class="{'disabled': formdata.username.length == 0}">
-                        Verify
+                        <span v-if="!requests.requestSent && !requests.isLoading && !requests.errorCode">Verify</span>
+                        <span v-else>Retry</span>
                     </div>
                 </div>
                 <!-- <div class="submit-button" @click="submitName">
@@ -47,32 +52,28 @@
         methods: {
             verify() {
                 if (this.formdata.username.length > 0) {
-                    this.$store.dispatch('onSubmitUsername', this.formdata.username);
+                    this.$store.dispatch('onSubmitUsername', {username: this.formdata.username, toVerify: true});
                 }                
             },
             submitName() {
                 console.log('username saved');
                 
             },
-            applyColoration(id) {
-                var lp =  document.querySelector('#' + id + ' .left-pill');
-                var input = document.querySelector('#' + id + ' input');
-                var i = document.querySelector('#' + id + ' i');
-                if (this.formdata.username.length > 0) {
-                    lp.style.color = "dodgerblue";
-                    input.style.color = "dodgerblue";
-                    i.style.color = "dodgerblue";
-                    lp.style.borderColor = "dodgerblue";
-                    input.style.borderColor = "dodgerblue";
+            applyColoration() {
+                if (!this.requests.requestSent && !this.requests.isLoading) {
+                    var formarea = document.querySelector('.formarea');
+                    if (this.formdata.username.length > 0) {
+                        formarea.classList.add('active');
+                    }
+                    else {
+                        formarea.classList.remove('active');
+                    }
                 }
-                else {
-                    lp.style.color = "#ccc";
-                    input.style.color = "#aaa";
-                    i.style.color = "#ccc";
-                    lp.style.borderColor = "#ccc";
-                    input.style.borderColor = "#ccc";
-                }
-                this.isSubmitAvailable = this.formdata.username.length > 0;
+            }
+        },
+        computed: {
+            requests() {
+                return this.$store.getters.requests;
             }
         },
     }
@@ -213,4 +214,19 @@
         line-height: 60px;
         background: #dedede
     }
+
+    .active i, .active .left-pill, .active input {
+        color: dodgerblue;
+        border-color: dodgerblue;
+    }
+
+    .valid i, .valid .left-pill, .valid input, .valid .submit-button{
+        color: lightgreen;
+        border-color: lightgreen;
+    }
+    .valid .right-pill {
+        background: lightgreen;
+        color: white;
+    }
+    
 </style>

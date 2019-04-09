@@ -147,6 +147,12 @@ export default new Vuex.Store({
     tryAutoLogin({commit}) {
       console.log('autolog');
 
+      commit('requestToServer', {
+        requestSent: true,
+        isLoading: true,
+        errorCode: false
+      });
+
       const user = JSON.parse(localStorage.getItem('user'));
       commit('applyUser', user);
 
@@ -189,6 +195,29 @@ export default new Vuex.Store({
             errorCode: res.data.errorCode
           });
         }
+      })
+      .catch(error => console.log(error))
+    },
+    onSubmitUsername({ commit, state }, data) {
+      commit('requestToServer', {
+        requestSent: true,
+        isLoading: true,
+        errorCode: false
+      });
+      axios.put('http://localhost:3000/username', {username: data.username, toVerify: data.toVerify}, { 
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + state.token
+        }
+      }).then(res => {
+        // show a popup or something to confirm user creation
+        console.log('res', res.data);
+        commit('requestToServer', {
+          requestSent: true,
+          isLoading: false,
+          errorCode: res.data.errorCode
+        });
+        
       })
       .catch(error => console.log(error))
     },

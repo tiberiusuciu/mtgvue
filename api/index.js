@@ -265,6 +265,121 @@ db.once('open', function() {
         }
     });
 
+    app.put('/username', verifyToken, (req, res) => {
+        var User = mongoose.model('User', UserSchema);
+
+        jwt.verify(req.token, storedCredentials.jwt.secretkey, (err, authData) => {
+            if (err) {
+                res.send({
+                    errorCode: "TOKEN_INVALID"
+                })
+            }
+            else {
+                // checking for expiration
+                if (authData['iat'] >= authData['exp']) {
+                    // console.log('token expired!');
+                }
+                else {
+                    if (req.body.toVerify) {
+                        const formusername = req.body.username;
+                        User.find({username: formusername} , (err, users) => {
+                            if(err) {
+                                console.log(err);
+                                res.send({
+                                    errorCode: "ERROR"
+                                })
+                                return;
+                            }
+                            if (users.length == 0) {
+                                res.send({
+                                    errorCode: false,
+                                    isValid: true
+                                })
+                            }
+                            else {
+                                res.send({
+                                    errorCode: "NAME_TAKEN",
+                                    isValid: false
+                                })
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    });
+
+    // app.put('/username', verifyToken, (req, res) => {
+    //     var User = mongoose.model('User', UserSchema);
+    //     var notFound = true;
+
+    //     jwt.verify(req.token, storedCredentials.jwt.secretkey, (err, authData) => {
+    //         if (err) {
+    //             res.send({
+    //                 errorCode: "TOKEN_INVALID"
+    //             })
+    //         }
+    //         else {
+
+    //             // checking for expiration
+    //             if (authData['iat'] >= authData['exp']) {
+    //                 // console.log('token expired!');
+    //             }
+    //             else {
+    //                 // console.log('token not expired yet');
+    //                 const email = authData.user.email;
+    //                 const username = req.body.username;
+
+    //                 if (email) {
+    //                     // go fetch the user
+    //                     // console.log('found an email in the token', email);
+
+    //                     User.find({} , (err, users) => {
+    //                         if(err) {
+    //                             console.log(err);
+    //                             res.send({
+    //                                 errorCode: "ERROR_LOGIN"
+    //                             })
+    //                             return;
+    //                         }
+    //                         users.map(user => {
+    //                             if (user.email === email) {
+    //                                 notFound = false;
+    //                                 // Alternatively, we could send the entire object, minus the password, without surgically selecting each field
+    //                                 const userNoPassword = {
+    //                                     color: user.color,
+    //                                     createdAt: user.createdAt,
+    //                                     decks: user.decks,
+    //                                     email: user.email,
+    //                                     isActive: user.isActive,
+    //                                     profile_picture: user.profile_picture,
+    //                                     id: user._id
+    //                                 };
+
+    //                                 res.send({
+    //                                     errorCode: false,
+    //                                     user: userNoPassword
+    //                                 })
+    //                             }
+    //                         })
+    //                         if (notFound) {
+    //                             res.send({
+    //                                 errorCode: "ERROR_LOGIN_CREDENTIALS"
+    //                             })
+    //                         }
+    //                     });
+    //                 }
+    //             }
+
+
+    //             // res.send({
+    //             //     errorCode: false,
+    //             //     authData
+    //             // })
+    //         }
+    //     });
+    // });
+
     app.put('/user', verifyToken, (req, res) => {
         jwt.verify(req.token, storedCredentials.jwt.secretkey, (err, authData) => {
             if (err) {
