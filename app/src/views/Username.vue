@@ -32,9 +32,9 @@
                     </div>
                 </div>
                 <p class="sub-title post-form" v-if="requests.errorCode == 'NAME_TAKEN'">That name is not available, please try again</p>
-                <!-- <div class="submit-button" @click="submitName">
-                    Submit
-                </div> -->
+                <div class="submit-button save" @click="submitName" v-if="requests.requestSent && !this.requests.isLoading && !requests.errorCode">
+                    Save
+                </div>
             </div>
         </div>
         <div class="bg"></div>
@@ -64,7 +64,7 @@
             },
             submitName() {
                 console.log('username saved');
-                
+                this.$store.dispatch('onSubmitUsername', {username: this.formdata.username, toVerify: false});
             },
             applyColoration() {
                 if (!this.requests.requestSent && !this.requests.isLoading) {
@@ -219,7 +219,6 @@
         width: 60%;
         margin-top: 25px;
         line-height: 60px;
-        background: #dedede
     }
 
     .active i, .active .left-pill, .active input {
@@ -247,5 +246,20 @@
     
     .post-form {
         margin-top: 40px;
+    }
+
+    .save {
+        background: rgba(52,163,247,1);
+        background: -moz-linear-gradient(left, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
+        background: -webkit-gradient(left top, right top, color-stop(0%, rgba(52,163,247,1)), color-stop(100%, rgba(90,39,230,1)));
+        background: -webkit-linear-gradient(left, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
+        background: -o-linear-gradient(left, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
+        background: -ms-linear-gradient(left, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
+        background: linear-gradient(to right, rgba(52,163,247,1) 0%, rgba(90,39,230,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34a3f7', endColorstr='#5a27e6', GradientType=1 );
+        cursor: pointer;
+    }
+    .save:hover {
+        opacity: .8;
     }
 </style>

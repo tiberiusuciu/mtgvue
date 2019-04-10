@@ -217,6 +217,17 @@ export default new Vuex.Store({
           isLoading: false,
           errorCode: res.data.errorCode
         });
+        console.log('did it work?', data.toVerify);
+        
+        if (data.toVerify == false) {
+
+
+          console.log('new user updaet', res.data.user);
+
+          var userString = JSON.stringify(res.data.user);
+          localStorage.setItem('user', userString);
+          commit('applyUser', res.data.user);
+        }
         
       })
       .catch(error => console.log(error))

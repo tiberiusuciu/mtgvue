@@ -23,9 +23,11 @@ const router = new Router({
       component: Home,
       beforeEnter: (to, from, next) => {
         const user = JSON.parse(localStorage.getItem('user'));
-        console.log('entering');
+        console.log('entering', user);
         
         if (store.getters.user) {
+          console.log('found the state', store.getters.user);
+          
           if (store.getters.user.username) {
             next();
           }
@@ -35,7 +37,7 @@ const router = new Router({
         }
         if (user) {
           if (user.username) {
-            router.push('/')
+            next();
           }
           else {
             router.push('/username')
@@ -76,6 +78,8 @@ const router = new Router({
       name: 'game',
       component: Game,
       beforeEnter: (to, from, next) => {
+        console.log('before game', store.getters);
+        
         if (!store.getters.user) {
           router.push('/login')
         }
@@ -137,9 +141,14 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+  console.log('before all');
+  const user = JSON.parse(localStorage.getItem('user'));
   if (store.getters.user && to.name !== 'username') {
     if (!store.getters.user.username) {
       router.push('/username')
+    }
+    else {
+      next();
     }
   }
   else {

@@ -180,6 +180,7 @@ db.once('open', function() {
                                         notFound = false;
                                         // Alternatively, we could send the entire object, minus the password, without surgically selecting each field
                                         const userNoPassword = {
+                                            username: user.username,
                                             color: user.color,
                                             createdAt: user.createdAt,
                                             decks: user.decks,
@@ -222,6 +223,7 @@ db.once('open', function() {
                         if (bcrypt.compareSync(req.body.password, user.password)) {
                             // Alternatively, we could send the entire object, minus the password, without surgically selecting each field
                             const userNoPassword = {
+                                username: user.username,
                                 color: user.color,
                                 createdAt: user.createdAt,
                                 decks: user.decks,
@@ -303,6 +305,55 @@ db.once('open', function() {
                                 })
                             }
                         });
+                    }
+                    else {
+                        // locate player
+                        // save username
+                        // return ok with passwordless user
+                        console.log('well well well');
+                        
+                        const jwtemail = authData.user.email;
+                        const formusername = req.body.username;
+                        if (jwtemail) {
+                            User.find({email: jwtemail} , (err, users) => {
+                                if(err) {
+                                    console.log(err);
+                                    res.send({
+                                        errorCode: "ERROR"
+                                    })
+                                    return;
+                                }
+                                console.log('users', users.length);
+                                
+                                if (users.length === 1) {
+                                    const user = users[0];
+                                    user.username = formusername;
+                                    user.save();
+                                    
+                                    const userNoPassword = {
+                                        username: user.username,
+                                        color: user.color,
+                                        createdAt: user.createdAt,
+                                        decks: user.decks,
+                                        email: user.email,
+                                        isActive: user.isActive,
+                                        profile_picture: user.profile_picture,
+                                        id: user._id
+                                    };
+
+                                    error = false;
+
+                                    res.send({
+                                        user: userNoPassword
+                                    })
+                                }
+                                else {
+                                    res.send({
+                                        errorCode: "USER_NOT_FOUND"
+                                    })
+                                }
+                            });
+                        }
                     }
                 }
             }
