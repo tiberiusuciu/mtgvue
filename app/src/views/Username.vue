@@ -25,12 +25,13 @@
                         placeholder="username"
                         v-model="formdata.username"
                         @input="applyColoration('username')"
-                        :disabled="requests.requestSent && !requests.isLoading && !requests.errorCode">
-                    <div class="right-pill" @click="verify" :class="{'disabled': formdata.username.length == 0}">
+                        :disabled="requests.requestSent">
+                    <div class="right-pill" @click="verifyOrRetry" :class="{'disabled': formdata.username.length == 0}">
                         <span v-if="!requests.requestSent && !requests.isLoading && !requests.errorCode">Verify</span>
                         <span v-else>Retry</span>
                     </div>
                 </div>
+                <p class="sub-title post-form" v-if="requests.errorCode == 'NAME_TAKEN'">That name is not available, please try again</p>
                 <!-- <div class="submit-button" @click="submitName">
                     Submit
                 </div> -->
@@ -50,8 +51,14 @@
             }
         },
         methods: {
-            verify() {
-                if (this.formdata.username.length > 0) {
+            verifyOrRetry() {
+                // is invalid
+                if (this.requests.requestSent && !this.requests.isLoading) {
+                    // cancel reqeust, re-init formdata
+                    this.formdata.username = "";
+                    this.$store.dispatch('clearRequest');
+                }
+                else if (this.formdata.username.length > 0 || this.requests.isLoading) {
                     this.$store.dispatch('onSubmitUsername', {username: this.formdata.username, toVerify: true});
                 }                
             },
@@ -131,7 +138,7 @@
     .formarea input {
         height: 60px;
         border: none;
-        border: 2px solid #ccc;
+        border: 2px solid #dedede;
         border-left: none;
         border-right: none;
         vertical-align: bottom;
@@ -155,7 +162,7 @@
         height: 60px;
         display: inline-block;
         margin-top: 0px;
-        border: 2px solid #ccc;
+        border: 2px solid #dedede;
         border-right: none;
         border-bottom-left-radius: 35px;
         border-top-left-radius: 35px;
@@ -228,5 +235,17 @@
         background: lightgreen;
         color: white;
     }
+
+    .invalid i, .invalid .left-pill, .invalid input, .invalid .submit-button{
+        color: lightcoral;
+        border-color: lightcoral;
+    }
+    .invalid .right-pill {
+        background: lightcoral;
+        color: white;
+    }
     
+    .post-form {
+        margin-top: 40px;
+    }
 </style>

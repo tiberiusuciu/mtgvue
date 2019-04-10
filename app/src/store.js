@@ -147,12 +147,6 @@ export default new Vuex.Store({
     tryAutoLogin({commit}) {
       console.log('autolog');
 
-      commit('requestToServer', {
-        requestSent: true,
-        isLoading: true,
-        errorCode: false
-      });
-
       const user = JSON.parse(localStorage.getItem('user'));
       commit('applyUser', user);
 
@@ -161,6 +155,12 @@ export default new Vuex.Store({
         console.log('no token found');
         return;
       }
+
+      commit('requestToServer', {
+        requestSent: true,
+        isLoading: true,
+        errorCode: false
+      });
 
       // if token found, go get user from api
       axios.post('http://localhost:3000/login', {
@@ -233,6 +233,13 @@ export default new Vuex.Store({
         
       })
       .catch(error => console.log(error))
+    },
+    clearRequest({commit}) {
+      commit('requestToServer', {
+        requestSent: false,
+        isLoading: false,
+        errorCode: false
+      });
     }
   },
   getters: {
