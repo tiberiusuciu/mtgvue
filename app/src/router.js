@@ -65,6 +65,10 @@ const router = new Router({
       component: Login,
       beforeEnter: (to, from, next) => {
         const user = JSON.parse(localStorage.getItem('user'));
+        console.log(user);
+        console.log(store.getters.user);
+        
+        
         if (store.getters.user || user) {
           router.push('/')
         }

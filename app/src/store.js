@@ -251,6 +251,19 @@ export default new Vuex.Store({
         isLoading: false,
         errorCode: false
       });
+    },
+    logout({commit}) {
+      commit('requestToServer', {
+        requestSent: false,
+        isLoading: false,
+        errorCode: false
+      });
+      commit('applyUser', null);
+      commit('applyToken', {
+        token: null
+      });
+      localStorage.clear();
+      router.push('/login');
     }
   },
   getters: {

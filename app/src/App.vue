@@ -3,10 +3,12 @@
     <transition name="fade">
       <div id="nav" v-if="showMenu">
         <div class="menu">
+          <div class="profile-pic" :style="{'backgroundImage': `url(${user.profile_picture.core_fallbackLinks[0]})`}"></div>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/" class="first-item" exact>Home</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/usersettings" v-if="user">Settings</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/login" v-if="!user">Login</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/signup" v-if="!user">Sign Up</router-link>
+          <router-link v-on:click.native="handleLogout" active-class="active-link" to="/login" v-if="user">Log Out</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/game" v-if="user">Game</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/about">About</router-link>
         </div>
@@ -63,6 +65,10 @@
           }, 60 / 1000)
         }
         this.$store.dispatch('onToggleMenu');
+      },
+      handleLogout() {
+        this.toggleMenu();
+        this.$store.dispatch('logout');
       }
     },
     computed: {
@@ -167,5 +173,17 @@ body {
 }
 .fade-enter, .fade-leave-to  {
   opacity: 0;
+}
+
+.profile-pic {
+  height: 221px;
+  width: 221px;
+  background-position-x: -31px;
+  background-position-y: -60px;
+  background-size: 363px auto;
+  border-radius: 66%;
+  margin: auto;
+  margin-top: 90px;
+  border: 6px solid ghostwhite;
 }
 </style>
