@@ -18,20 +18,6 @@
                             </div>
                             <div class="right-pill"></div>
                         </div>
-                        <!-- thinking of removing username, it's one extra step that should be done after account creation -->
-                        <!-- <div class="pill-input" id="username">
-                            <div class="left-pill"><i class="fas fa-user-alt"></i></div>
-                            <div class="pill-input-area">
-                                <input
-                                    type="text"
-                                    placeholder="Username"
-                                    class="pill-input-tag"
-                                    v-model="formdata.username.value"
-                                    @change='hasChanged("username")'
-                                    @blur='validateUsername()'/>
-                            </div>
-                            <div class="right-pill"></div>
-                        </div> -->
                         <div class="pill-input" id="password">
                             <div class="left-pill"><i class="fas fa-key"></i></div>
                             <div class="pill-input-area">
@@ -80,7 +66,7 @@
                                 Success!
                             </h1>
                             <p class="postrequest-message-more">
-                                A confirmation message has been sent to your email.
+                                A confirmation message has been sent to <span class="email-sent">{{formdata.email.value}}</span>
                             </p>
                             <p class="postrequest-message-more">
                                 Please confirm it in the next 10 days, otherwise this account will be deleted 
@@ -130,11 +116,6 @@ export default {
                     isValid: false,
                     isTouched: false
                 },
-                // username: {
-                //     value: "",
-                //     isValid: false,
-                //     isTouched: false
-                // },
                 password: {
                     value: "",
                     isValid: false,
@@ -206,16 +187,6 @@ export default {
                 this.applyValidationColor('email', this.formdata.email.isValid)
             }
         },
-        // validateUsername() {
-        //     // Making sure username has no special characters, and it's not empty either
-        //     this.formdata.username.value = this.formdata.username.value.trim();
-        //     var format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
-        //     this.formdata.username.isValid = !format.test(this.formdata.username.value) && !this.formdata.username.value.length == 0;
-
-        //     if (this.formdata.username.isTouched) {
-        //         this.applyValidationColor('username', this.formdata.username.isValid)
-        //     }
-        // },
         validatePassword() {
             // Making sure the password is at least 8 character (really standard, nothing fancy)
             this.formdata.password.isValid = this.formdata.password.value.length >= 8;
@@ -530,5 +501,9 @@ export default {
     }
     .postrequest-message-button:hover {
         opacity: .8;
+    }
+    .email-sent {
+        color: dodgerblue;
+        font-weight: bold;
     }
 </style>
