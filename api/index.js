@@ -447,6 +447,48 @@ db.once('open', function() {
         });
     });
 
+    app.get('/cards', (req, res) => {
+        console.log('req', req.query);
+
+        var Card = mongoose.model('Card', CardSchema);
+
+        if (req.query.filter == "") {
+            Card.find({}, 'name', (err, cards) => {
+                if(err) console.log(err);
+                console.log('cards', cards.length);
+                
+                res.send(cards);
+            })
+        }
+        else {
+            var regex = new RegExp(req.query.filter, "i");
+            console.log('regex', regex);
+            
+            Card.find({name: regex}, 'name', (err, cards) => {
+                if(err) console.log(err);
+                console.log('filter', req.query.filter);
+                
+                console.log('cards', cards.length);
+                
+                res.send(cards);
+            })
+        }
+    })
+
+    app.get('/card', (req, res) => {
+        console.log('req', req.query);
+        var Card = mongoose.model('Card', CardSchema);
+            
+        Card.find({_id: req.query.id}, (err, cards) => {
+            if(err) console.log(err);
+            console.log('filter', req.query.filter);
+            
+            console.log('cards', cards.length);
+            
+            res.send(cards[0]);
+        })
+    })
+
     // Format of token
     // Authorization: Bearer <access_token>
 

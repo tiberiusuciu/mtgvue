@@ -9,6 +9,7 @@ import Signup from './views/Signup.vue'
 import Login from './views/Login.vue'
 import UserSettings from './views/UserSettings.vue'
 import Username from './views/Username.vue'
+import CardSearch from './views/CardSearch.vue'
 import NotFound from './views/NotFound.vue'
 
 Vue.use(Router)
@@ -127,6 +128,11 @@ const router = new Router({
           next();
         }
       }
+    },
+    {
+      path: '/cardsearch',
+      name: 'cardsearch',
+      component: CardSearch
     },
     {
       path: '/about',

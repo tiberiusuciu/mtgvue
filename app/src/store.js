@@ -25,7 +25,9 @@ export default new Vuex.Store({
       isLoading: false,
       errorCode: false
     },
-    token: {}
+    token: {},
+    cardResults: [],
+    viewingCard: null,
   },
   mutations: {
     toggleMenu (state) {
@@ -48,6 +50,14 @@ export default new Vuex.Store({
     },
     applyToken (state, token) {
       state.token = token
+    },
+    filteredCards (state, cards) {
+      console.log('assigning', cards.length);
+      
+      state.cardResults = cards
+    },
+    cardSearchViewCard (state, card) {
+      state.viewingCard = card;
     }
   },
   actions: {
@@ -264,6 +274,38 @@ export default new Vuex.Store({
       });
       localStorage.clear();
       router.push('/login');
+    },
+    getCards({commit}, filter) {
+      axios.get('http://localhost:3000/cards', {
+        params: {
+          filter
+        }
+      }, { 
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => {
+        // show a popup or something to confirm user creation
+        // console.log('res', res.data);
+        commit('filteredCards', res.data);
+      })
+      .catch(error => console.log(error))
+    },
+    getCard({commit}, id) {
+      axios.get('http://localhost:3000/card', {
+        params: {
+          id
+        }
+      }, { 
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => {
+        // show a popup or something to confirm user creation
+        console.log('res', res.data);
+        commit('cardSearchViewCard', res.data);
+      })
+      .catch(error => console.log(error))
     }
   },
   getters: {
@@ -277,10 +319,16 @@ export default new Vuex.Store({
       return state.game;
     },
     requests (state) {
-      return state.requests
+      return state.requests;
     },
     token (state) {
-      return state.token
+      return state.token;
+    },
+    cardResults (state) {
+      return state.cardResults;
+    },
+    viewingCard (state) {
+      return state.viewingCard;
     }
   }
 })

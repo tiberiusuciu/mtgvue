@@ -10,6 +10,7 @@
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/signup" v-if="!user">Sign Up</router-link>
           <router-link v-on:click.native="handleLogout" active-class="active-link" to="/login" v-if="user">Log Out</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/game" v-if="user">Game</router-link>
+          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/cardsearch" v-if="user">Cards</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/about">About</router-link>
         </div>
         <div class="shadow" @click="toggleMenu">
