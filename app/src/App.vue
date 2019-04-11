@@ -3,7 +3,7 @@
     <transition name="fade">
       <div id="nav" v-if="showMenu">
         <div class="menu">
-          <div class="profile-pic" :style="{'backgroundImage': `url(${user.profile_picture.core_fallbackLinks[0]})`}"></div>
+          <div v-if="user" class="profile-pic" :style="{'backgroundImage': `url(${user.profile_picture.core_fallbackLinks[0]})`}"></div>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/" class="first-item" exact>Home</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/usersettings" v-if="user">Settings</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/login" v-if="!user">Login</router-link>
