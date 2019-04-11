@@ -32,6 +32,9 @@
                     </div>
                 </div>
                 <p class="sub-title post-form" v-if="requests.errorCode == 'NAME_TAKEN'">That name is not available, please try again</p>
+                <p class="sub-title post-form error-message" style="margin-top:30px;" v-if="requests.errorCode == 'NAME_INVALID'">That name is not valid, please try again</p>
+                <p class="sub-title post-form error-message" v-if="requests.errorCode == 'NAME_INVALID'">- It must not have special characters</p>
+                <p class="sub-title post-form error-message" v-if="requests.errorCode == 'NAME_INVALID'">- It must not be longer than 12 characters</p>
                 <div class="submit-button save" @click="submitName" v-if="requests.requestSent && !this.requests.isLoading && !requests.errorCode">
                     Save
                 </div>
@@ -47,12 +50,32 @@
             return {
                 formdata: {
                     username: ""
-                }
+                },
+                isValid: false,
+                displayError: false,
             }
         },
         methods: {
             verifyOrRetry() {
                 // is invalid
+
+
+                this.formdata.username = this.formdata.username.trim();
+                var format = /[!@#$%^&*()+\\=\[\]{};':"\\|,.<>\/?]/;
+                this.isValid = !format.test(this.formdata.username) && !this.formdata.username.length == 0 && this.formdata.username.length <= 12;
+
+                if (!this.isValid && !this.displayError) {
+                    this.displayError = true;
+                    this.requests.errorCode = "NAME_INVALID";
+                    this.requests.requestSent = true;
+                    this.requests.isLoading = false;
+                    return;
+                }
+
+                if (this.formdata.username.isTouched) {
+                    this.applyValidationColor('username', this.formdata.username.isValid)
+                }
+
                 if (this.requests.requestSent && !this.requests.isLoading) {
                     // cancel reqeust, re-init formdata
                     this.formdata.username = "";
@@ -261,5 +284,8 @@
     }
     .save:hover {
         opacity: .8;
+    }
+    .error-message {
+        margin-top: 0px;
     }
 </style>
