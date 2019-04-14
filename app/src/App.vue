@@ -18,8 +18,16 @@
         </div>
       </div>
     </transition>
-    <div class="burger-button" @click="toggleMenu">
-      <i class="fas fa-bars"></i>
+    <div class="burger-button" @click="toggleMenu" :class="{'is-not-active': this.user && !this.user.isActive}">
+      <div class="burger-icon">
+        <i class="fas fa-bars"></i>
+
+      </div>
+      <template v-if="this.user && !this.user.isActive">
+        <div class="not-active-message">
+          Your account has not been activated. Please check your emails!
+        </div>
+      </template>
     </div>
     <!-- <img src="https://img.scryfall.com/cards/large/en/c16/322.jpg?1517813031" width="300" alt="test"> -->
     <router-view/>
@@ -148,6 +156,7 @@ body {
   transition-duration: .25s;
   transition-timing-function: ease-in-out;
   z-index: 2;
+  display: flex;
 }
 
 .burger-button:hover i{
@@ -156,7 +165,13 @@ body {
   margin-left: 18px;
 }
 
-.burger-button:hover {
+.burger-icon {
+  transition-property: line-height;
+  transition-duration: .25s;
+}
+
+
+.burger-button:hover .burger-icon {
   line-height: 75px;
 }
 
@@ -186,5 +201,26 @@ body {
   margin: auto;
   margin-top: 90px;
   border: 6px solid ghostwhite;
+}
+
+.is-not-active {
+  background-color: crimson;
+}
+
+.is-not-active .burger-icon{
+  color: ghostwhite;
+}
+
+.burger-icon {
+  display: inline-block;
+  width: 100px;
+}
+.not-active-message {
+  color: ghostwhite;
+  text-align: center;
+  display: inline-block;
+  flex: 1;
+  line-height: 60px;
+  font-weight: bold;
 }
 </style>
