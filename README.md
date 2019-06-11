@@ -1,7 +1,7 @@
 # MtgVue
 Magic the Gathering within a browser
 
-Project just started, here are some prototype of what I got so far
+Project is still in construction!
 ![](hovering.gif)
 
 ![](dragging.gif)
