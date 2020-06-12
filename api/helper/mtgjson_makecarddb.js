@@ -10,6 +10,8 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
 
+    console.log('attempting to read cards');
+    
     // Making model using the schema
     var Card = mongoose.model('Card', CardSchema);
 
@@ -23,6 +25,8 @@ db.once('open', function() {
 
         for (var key in mtgjson) {
             console.log("Getting all cards from:", key);
+            console.log('here is a preview', mtgjson[key]);
+            
 
             for (var i = 0; i < mtgjson[key].cards.length; i++) {
                 var card = new Card(mtgjson[key].cards[i]);
@@ -37,6 +41,7 @@ db.once('open', function() {
         console.log("Done!");
     });
 });
+
 
 // Use this in another file (it imports all sets to mongodb)
 // exec('/c/Program Files/MongoDB/Server/4.0/bin/mongoimport.exe --db mtgdb --collection allset --file ~/Documents/labs/mtgvue/api/helper/tmp/' + key + '.json', (err, stdout, stderr) => {

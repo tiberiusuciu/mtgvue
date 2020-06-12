@@ -12,6 +12,8 @@ var CardSchema = require('./Schemas/Card');
 var UserSchema = require('./Schemas/User');
 
 const storedCredentials = require('./Untracked/credentials');
+console.log(storedCredentials);
+
 
 app.use(cors({credentials: true, origin: true}))
 app.use(bodyParser.urlencoded({ extended: false }))

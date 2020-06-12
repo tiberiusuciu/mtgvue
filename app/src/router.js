@@ -83,14 +83,15 @@ const router = new Router({
       name: 'game',
       component: Game,
       beforeEnter: (to, from, next) => {
-        console.log('before game', store.getters);
+        // console.log('before game', store.getters);
         
-        if (!store.getters.user) {
-          router.push('/login')
-        }
-        else {
-          next();
-        }
+        // if (!store.getters.user) {
+        //   router.push('/login')
+        // }
+        // else {
+        //   next();
+        // }
+        next();
       }
     },
     {
