@@ -21,7 +21,7 @@ app.use(bodyParser.json())
 
 const port = 3000
 
-mongoose.connect('mongodb://localhost/mtgdb', {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost/mtgdb', {useNewUrlParser: true, useUnifiedTopology: true });
 
 var db = mongoose.connection;
 

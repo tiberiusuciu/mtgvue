@@ -45,68 +45,65 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                formdata: {
-                    username: ""
-                },
-                isValid: false,
-                displayError: false,
-            }
-        },
-        methods: {
-            verifyOrRetry() {
-                // is invalid
-
-
-                this.formdata.username = this.formdata.username.trim();
-                var format = /[!@#$%^&*()+\\=\[\]{};':"\\|,.<>\/?]/;
-                this.isValid = !format.test(this.formdata.username) && !this.formdata.username.length == 0 && this.formdata.username.length <= 12;
-
-                if (!this.isValid && !this.displayError) {
-                    this.displayError = true;
-                    this.requests.errorCode = "NAME_INVALID";
-                    this.requests.requestSent = true;
-                    this.requests.isLoading = false;
-                    return;
-                }
-
-                if (this.formdata.username.isTouched) {
-                    this.applyValidationColor('username', this.formdata.username.isValid)
-                }
-
-                if (this.requests.requestSent && !this.requests.isLoading) {
-                    // cancel reqeust, re-init formdata
-                    this.formdata.username = "";
-                    this.$store.dispatch('clearRequest');
-                }
-                else if (this.formdata.username.length > 0 || this.requests.isLoading) {
-                    this.$store.dispatch('onSubmitUsername', {username: this.formdata.username, toVerify: true});
-                }                
-            },
-            submitName() {
-                console.log('username saved');
-                this.$store.dispatch('onSubmitUsername', {username: this.formdata.username, toVerify: false});
-            },
-            applyColoration() {
-                if (!this.requests.requestSent && !this.requests.isLoading) {
-                    var formarea = document.querySelector('.formarea');
-                    if (this.formdata.username.length > 0) {
-                        formarea.classList.add('active');
-                    }
-                    else {
-                        formarea.classList.remove('active');
-                    }
-                }
-            }
-        },
-        computed: {
-            requests() {
-                return this.$store.getters.requests;
-            }
-        },
+export default {
+  data () {
+    return {
+      formdata: {
+        username: ''
+      },
+      isValid: false,
+      displayError: false
     }
+  },
+  methods: {
+    verifyOrRetry () {
+      // is invalid
+
+      this.formdata.username = this.formdata.username.trim()
+      var format = /[!@#$%^&*()+=[\]{};':"\\|,.<>/?]/
+      this.isValid = !format.test(this.formdata.username) && !this.formdata.username.length === 0 && this.formdata.username.length <= 12
+
+      if (!this.isValid && !this.displayError) {
+        this.displayError = true
+        this.requests.errorCode = 'NAME_INVALID'
+        this.requests.requestSent = true
+        this.requests.isLoading = false
+        return
+      }
+
+      if (this.formdata.username.isTouched) {
+        this.applyValidationColor('username', this.formdata.username.isValid)
+      }
+
+      if (this.requests.requestSent && !this.requests.isLoading) {
+        // cancel reqeust, re-init formdata
+        this.formdata.username = ''
+        this.$store.dispatch('clearRequest')
+      } else if (this.formdata.username.length > 0 || this.requests.isLoading) {
+        this.$store.dispatch('onSubmitUsername', { username: this.formdata.username, toVerify: true })
+      }
+    },
+    submitName () {
+      console.log('username saved')
+      this.$store.dispatch('onSubmitUsername', { username: this.formdata.username, toVerify: false })
+    },
+    applyColoration () {
+      if (!this.requests.requestSent && !this.requests.isLoading) {
+        var formarea = document.querySelector('.formarea')
+        if (this.formdata.username.length > 0) {
+          formarea.classList.add('active')
+        } else {
+          formarea.classList.remove('active')
+        }
+      }
+    }
+  },
+  computed: {
+    requests () {
+      return this.$store.getters.requests
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -230,7 +227,7 @@
     .disabled:hover {
         opacity: 1;
     }
-    
+
     .submit-button {
         border-radius: 35px;
         text-align: center;
@@ -266,7 +263,7 @@
         background: lightcoral;
         color: white;
     }
-    
+
     .post-form {
         margin-top: 40px;
     }

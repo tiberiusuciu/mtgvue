@@ -8,13 +8,13 @@
 </template>
 
 <script>
-    export default {
-        methods: {
-            userupdate() {
-                this.$store.dispatch('onUserUpdate');
-            }
-        },   
+export default {
+  methods: {
+    userupdate () {
+      this.$store.dispatch('onUserUpdate')
     }
+  }
+}
 </script>
 
 <style scoped>

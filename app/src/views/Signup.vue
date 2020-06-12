@@ -1,225 +1,223 @@
 <template>
-    <div class="bg">
-        <div class="backdrop">
-            <div class="user-create-box">
-                <div class="user-create-form">
-                    <template v-if="!requests.isLoading && !requests.requestSent">
-                        <h1 class="title">Sign Up</h1>
-                        <div class="pill-input" id="email">
-                            <div class="left-pill"><i class="fas fa-envelope"></i></div>
-                            <div class="pill-input-area">
-                                <input 
-                                    type="email"
-                                    placeholder="E-Mail"
-                                    class="pill-input-tag" 
-                                    v-model="formdata.email.value"
-                                    @change='hasChanged("email")'
-                                    @blur='validateEmail()'/>
-                            </div>
-                            <div class="right-pill"></div>
-                        </div>
-                        <div class="pill-input" id="password">
-                            <div class="left-pill"><i class="fas fa-key"></i></div>
-                            <div class="pill-input-area">
-                                <input
-                                    type="password"
-                                    placeholder="Password (8 char min)"
-                                    class="pill-input-tag"
-                                    v-model="formdata.password.value"
-                                    @change='hasChanged("password")'
-                                    @blur='validatePassword()'/>
-                            </div>
-                            <div class="right-pill"></div>
-                        </div>
-                        <div class="pill-input" id="confirm">
-                            <div class="left-pill"><i class="fas fa-check-circle"></i></div>
-                            <div class="pill-input-area">
-                                <input
-                                    type="password"
-                                    placeholder="Confirm Password"
-                                    class="pill-input-tag"
-                                    v-model="formdata.confirmpassword.value"
-                                    @keyup='handler()'/>
-                            </div>
-                            <div class="right-pill"></div>
-                        </div>
-                        <div class="submit-button" :class='{"disable": !isSubmitAvailable, "tooltip": isFormInvalid}' @click="submitSignup">
-                            Submit
-                        </div>
-                    </template>
-
-                    <template v-if="requests.isLoading && requests.requestSent">
-                        <div class="spring-spinner">
-                            <div class="spring-spinner-part top">
-                                <div class="spring-spinner-rotator"></div>
-                            </div>
-                        <h1 class="title loading">Loading...</h1>
-                            <div class="spring-spinner-part bottom">
-                                <div class="spring-spinner-rotator"></div>
-                            </div>
-                        </div>
-                    </template>
-
-                    <template v-if="!requests.isLoading && requests.requestSent">
-                        <template v-if="!requests.isLoading && requests.requestSent && !requests.errorCode">
-                            <h1 class="title postrequest-message">
-                                Success!
-                            </h1>
-                            <p class="postrequest-message-more">
-                                A confirmation message has been sent to <span class="email-sent">{{formdata.email.value}}</span>
-                            </p>
-                            <p class="postrequest-message-more">
-                                Please confirm it in the next 10 days, otherwise this account will be deleted 
-                            </p>
-                        </template>
-                        <template v-if="!requests.isLoading && requests.requestSent && requests.errorCode">
-                            <h1 class="title postrequest-message">
-                                Error!
-                            </h1>
-                            <p class="postrequest-message-more">
-                                There has been an error processing your request:
-                            </p>
-                            <p class="postrequest-message-more" v-if="requests.errorCode === 'EMAIL_TAKEN'" style="color: #000">
-                                The provided email is not available
-                            </p>
-                            <p class="postrequest-message-more" v-if="requests.errorCode === 'PASSWORD_INVALID'">
-                                The provided password is invalid
-                            </p>
-                            <p class="postrequest-message-more">
-                                Please try again
-                            </p>
-                        </template>
-                        <div class="postrequest-message-button" @click="closeMessage">
-                            Ok
-                        </div>
-                    </template>
+  <div class="bg">
+      <div class="backdrop">
+        <div class="user-create-box">
+          <div class="user-create-form">
+            <template v-if="!requests.isLoading && !requests.requestSent">
+              <h1 class="title">Sign Up</h1>
+              <div class="pill-input" id="email">
+                <div class="left-pill"><i class="fas fa-envelope"></i></div>
+                <div class="pill-input-area">
+                  <input
+                      type="email"
+                      placeholder="E-Mail"
+                      class="pill-input-tag"
+                      v-model="formdata.email.value"
+                      @change='hasChanged("email")'
+                      @blur='validateEmail()'/>
                 </div>
-            </div>
-            <div class="secondary-panel">
-                <h1>Sign in</h1>
-                <h4>If you already have an account, click the button below to connect</h4>
-                <div class="login-button" @click="redirectToLogin">
-                    Sign In
+                <div class="right-pill"></div>
+              </div>
+              <div class="pill-input" id="password">
+                <div class="left-pill"><i class="fas fa-key"></i></div>
+                <div class="pill-input-area">
+                  <input
+                      type="password"
+                      placeholder="Password (8 char min)"
+                      class="pill-input-tag"
+                      v-model="formdata.password.value"
+                      @change='hasChanged("password")'
+                      @blur='validatePassword()'/>
                 </div>
-            </div>
+                <div class="right-pill"></div>
+              </div>
+              <div class="pill-input" id="confirm">
+                <div class="left-pill"><i class="fas fa-check-circle"></i></div>
+                <div class="pill-input-area">
+                  <input
+                      type="password"
+                      placeholder="Confirm Password"
+                      class="pill-input-tag"
+                      v-model="formdata.confirmpassword.value"
+                      @keyup='handler()'/>
+                </div>
+                <div class="right-pill"></div>
+              </div>
+              <div class="submit-button" :class='{"disable": !isSubmitAvailable, "tooltip": isFormInvalid}' @click="submitSignup">
+                Submit
+              </div>
+            </template>
+
+            <template v-if="requests.isLoading && requests.requestSent">
+              <div class="spring-spinner">
+                <div class="spring-spinner-part top">
+                  <div class="spring-spinner-rotator"></div>
+                </div>
+              <h1 class="title loading">Loading...</h1>
+                <div class="spring-spinner-part bottom">
+                  <div class="spring-spinner-rotator"></div>
+                </div>
+              </div>
+            </template>
+
+            <template v-if="!requests.isLoading && requests.requestSent">
+              <template v-if="!requests.isLoading && requests.requestSent && !requests.errorCode">
+                <h1 class="title postrequest-message">
+                  Success!
+                </h1>
+                <p class="postrequest-message-more">
+                  A confirmation message has been sent to <span class="email-sent">{{formdata.email.value}}</span>
+                </p>
+                <p class="postrequest-message-more">
+                  Please confirm it in the next 10 days, otherwise this account will be deleted
+                </p>
+              </template>
+              <template v-if="!requests.isLoading && requests.requestSent && requests.errorCode">
+                <h1 class="title postrequest-message">
+                  Error!
+                </h1>
+                <p class="postrequest-message-more">
+                  There has been an error processing your request:
+                </p>
+                <p class="postrequest-message-more" v-if="requests.errorCode === 'EMAIL_TAKEN'" style="color: #000">
+                  The provided email is not available
+                </p>
+                <p class="postrequest-message-more" v-if="requests.errorCode === 'PASSWORD_INVALID'">
+                  The provided password is invalid
+                </p>
+                <p class="postrequest-message-more">
+                  Please try again
+                </p>
+              </template>
+              <div class="postrequest-message-button" @click="closeMessage">
+                Ok
+              </div>
+            </template>
+          </div>
         </div>
-    </div>
+        <div class="secondary-panel">
+          <h1>Sign in</h1>
+          <h4>If you already have an account, click the button below to connect</h4>
+          <div class="login-button" @click="redirectToLogin">
+            Sign In
+          </div>
+        </div>
+      </div>
+  </div>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-            formdata: {
-                email: {
-                    value: "",
-                    isValid: false,
-                    isTouched: false
-                },
-                password: {
-                    value: "",
-                    isValid: false,
-                    isTouched: false
-                },
-                confirmpassword: {
-                    value: "",
-                    isValid: false,
-                    isTouched: false
-                },
-            },
-            isSubmitAvailable: false,
-            isFormInvalid: false
+  data () {
+    return {
+      formdata: {
+        email: {
+          value: '',
+          isValid: false,
+          isTouched: false
+        },
+        password: {
+          value: '',
+          isValid: false,
+          isTouched: false
+        },
+        confirmpassword: {
+          value: '',
+          isValid: false,
+          isTouched: false
         }
+      },
+      isSubmitAvailable: false,
+      isFormInvalid: false
+    }
+  },
+  methods: {
+    submitSignup () {
+      if (this.isSubmitAvailable) {
+        this.$store.dispatch('onCreateUser', this.formdata)
+      }
     },
-    methods: {
-        submitSignup() {
-            if (this.isSubmitAvailable) {
-                this.$store.dispatch('onCreateUser', this.formdata);
-            }
-        },
-        handler() {
-            this.hasChanged("confirmpassword");
-            this.validateConfirmPassword();
-        },
-        hasChanged(key) {
-            this.formdata[key].isTouched = true;
-        },
-        applyValidationColor (id, isValid) {
-            var i = document.querySelector('#' + id + ' i');
-            var lp = document.querySelector('#' + id + ' .left-pill');
-            var pa = document.querySelector('#' + id + ' .pill-input-area');
-            var rp = document.querySelector('#' + id + ' .right-pill');
-            var input = document.querySelector('#' + id + ' input');
-
-            if (isValid) {
-                i.style.color = "dodgerblue";
-                input.style.color = "dodgerblue";
-                lp.style.borderColor = "dodgerblue";
-                pa.style.borderColor = "dodgerblue";
-                rp.style.borderColor = "dodgerblue";
-            }
-            else {
-                i.style.color = "lightcoral";
-                input.style.color = "lightcoral";
-                lp.style.borderColor = "lightcoral";
-                pa.style.borderColor = "lightcoral";
-                rp.style.borderColor = "lightcoral";
-            }
-            this.checkSubmitButton();
-        },
-        checkSubmitButton() {
-            //this.formdata.username.isValid
-            if (this.formdata.email.isValid && this.formdata.password.isValid && this.formdata.confirmpassword.isValid) {
-                this.isSubmitAvailable = true;
-                this.isFormInvalid = false;              
-            }
-            else {
-                this.isSubmitAvailable = false;
-                this.isFormInvalid = true;
-            }
-        },
-        validateEmail() {
-            // basic email validation
-            var emailfield = document.querySelector('#email input');
-            this.formdata.email.isValid = emailfield.checkValidity() && this.formdata.email.isTouched && this.formdata.email.value.length > 0;
-
-            if (this.formdata.email.isTouched) {
-                this.applyValidationColor('email', this.formdata.email.isValid)
-            }
-        },
-        validatePassword() {
-            // Making sure the password is at least 8 character (really standard, nothing fancy)
-            this.formdata.password.isValid = this.formdata.password.value.length >= 8;
-            if (this.formdata.password.isTouched) {
-                this.applyValidationColor('password', this.formdata.password.isValid)
-            }
-        },
-        validateConfirmPassword() {
-            // Making sure the confirmation matches the password
-            this.formdata.confirmpassword.isValid = this.formdata.password.value === this.formdata.confirmpassword.value && this.formdata.password.isValid;
-
-            if (this.formdata.confirmpassword.isTouched) {
-                this.applyValidationColor('confirm', this.formdata.confirmpassword.isValid)
-            }
-        },
-        closeMessage() {
-            var sendToLogin = !this.requests.isLoading && this.requests.requestSent && !this.requests.errorCode;
-            console.log('abouttoclose', sendToLogin);
-            
-            this.$store.dispatch('clearPostRequestMessage');
-            if (sendToLogin) {
-                this.redirectToLogin();
-            }
-        },
-        redirectToLogin() {
-            this.$router.push('/login');
-        }
+    handler () {
+      this.hasChanged('confirmpassword')
+      this.validateConfirmPassword()
     },
-    computed: {
-        requests() {
-            return this.$store.getters.requests
-        }
+    hasChanged (key) {
+      this.formdata[key].isTouched = true
     },
+    applyValidationColor (id, isValid) {
+      var i = document.querySelector('#' + id + ' i')
+      var lp = document.querySelector('#' + id + ' .left-pill')
+      var pa = document.querySelector('#' + id + ' .pill-input-area')
+      var rp = document.querySelector('#' + id + ' .right-pill')
+      var input = document.querySelector('#' + id + ' input')
+
+      if (isValid) {
+        i.style.color = 'dodgerblue'
+        input.style.color = 'dodgerblue'
+        lp.style.borderColor = 'dodgerblue'
+        pa.style.borderColor = 'dodgerblue'
+        rp.style.borderColor = 'dodgerblue'
+      } else {
+        i.style.color = 'lightcoral'
+        input.style.color = 'lightcoral'
+        lp.style.borderColor = 'lightcoral'
+        pa.style.borderColor = 'lightcoral'
+        rp.style.borderColor = 'lightcoral'
+      }
+      this.checkSubmitButton()
+    },
+    checkSubmitButton () {
+      // this.formdata.username.isValid
+      if (this.formdata.email.isValid && this.formdata.password.isValid && this.formdata.confirmpassword.isValid) {
+        this.isSubmitAvailable = true
+        this.isFormInvalid = false
+      } else {
+        this.isSubmitAvailable = false
+        this.isFormInvalid = true
+      }
+    },
+    validateEmail () {
+      // basic email validation
+      var emailfield = document.querySelector('#email input')
+      this.formdata.email.isValid = emailfield.checkValidity() && this.formdata.email.isTouched && this.formdata.email.value.length > 0
+
+      if (this.formdata.email.isTouched) {
+        this.applyValidationColor('email', this.formdata.email.isValid)
+      }
+    },
+    validatePassword () {
+      // Making sure the password is at least 8 character (really standard, nothing fancy)
+      this.formdata.password.isValid = this.formdata.password.value.length >= 8
+      if (this.formdata.password.isTouched) {
+        this.applyValidationColor('password', this.formdata.password.isValid)
+      }
+    },
+    validateConfirmPassword () {
+      // Making sure the confirmation matches the password
+      this.formdata.confirmpassword.isValid = this.formdata.password.value === this.formdata.confirmpassword.value && this.formdata.password.isValid
+
+      if (this.formdata.confirmpassword.isTouched) {
+        this.applyValidationColor('confirm', this.formdata.confirmpassword.isValid)
+      }
+    },
+    closeMessage () {
+      var sendToLogin = !this.requests.isLoading && this.requests.requestSent && !this.requests.errorCode
+      console.log('abouttoclose', sendToLogin)
+
+      this.$store.dispatch('clearPostRequestMessage')
+      if (sendToLogin) {
+        this.redirectToLogin()
+      }
+    },
+    redirectToLogin () {
+      this.$router.push('/login')
+    }
+  },
+  computed: {
+    requests () {
+      return this.$store.getters.requests
+    }
+  }
 }
 </script>
 

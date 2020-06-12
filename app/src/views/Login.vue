@@ -71,52 +71,51 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                formdata: {
-                    email: "",
-                    password: ""
-                },
-                isSubmitAvailable: false,
-            }
-        },
-        methods: {
-            login() {
-                if (this.isSubmitAvailable) {
-                    this.$store.dispatch('onLogin', this.formdata);
-                }
-            },
-            applyColoration(id) {
-                var lp =  document.querySelector('#' + id + ' .left-pill');
-                var input = document.querySelector('#' + id + ' input');
-                var i = document.querySelector('#' + id + ' i');
-                if (this.formdata.email.length > 0) {
-                    lp.style.color = "dodgerblue";
-                    input.style.color = "dodgerblue";
-                    i.style.color = "dodgerblue";
-                    lp.style.borderColor = "dodgerblue";
-                    input.style.borderColor = "dodgerblue";
-                }
-                else {
-                    lp.style.color = "#ccc";
-                    input.style.color = "#aaa";
-                    i.style.color = "#ccc";
-                    lp.style.borderColor = "#ccc";
-                    input.style.borderColor = "#ccc";
-                }
-                this.isSubmitAvailable = this.formdata.email.length > 0 && this.formdata.password.length > 0;
-            },
-            closeMessage() {
-                this.$store.dispatch('clearPostRequestMessage');
-            },
-        },
-        computed: {
-            requests() {
-                return this.$store.getters.requests
-            }
-        }
+export default {
+  data () {
+    return {
+      formdata: {
+        email: '',
+        password: ''
+      },
+      isSubmitAvailable: false
     }
+  },
+  methods: {
+    login () {
+      if (this.isSubmitAvailable) {
+        this.$store.dispatch('onLogin', this.formdata)
+      }
+    },
+    applyColoration (id) {
+      var lp = document.querySelector('#' + id + ' .left-pill')
+      var input = document.querySelector('#' + id + ' input')
+      var i = document.querySelector('#' + id + ' i')
+      if (this.formdata.email.length > 0) {
+        lp.style.color = 'dodgerblue'
+        input.style.color = 'dodgerblue'
+        i.style.color = 'dodgerblue'
+        lp.style.borderColor = 'dodgerblue'
+        input.style.borderColor = 'dodgerblue'
+      } else {
+        lp.style.color = '#ccc'
+        input.style.color = '#aaa'
+        i.style.color = '#ccc'
+        lp.style.borderColor = '#ccc'
+        input.style.borderColor = '#ccc'
+      }
+      this.isSubmitAvailable = this.formdata.email.length > 0 && this.formdata.password.length > 0
+    },
+    closeMessage () {
+      this.$store.dispatch('clearPostRequestMessage')
+    }
+  },
+  computed: {
+    requests () {
+      return this.$store.getters.requests
+    }
+  }
+}
 </script>
 
 <style scoped>

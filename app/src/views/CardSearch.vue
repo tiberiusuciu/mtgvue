@@ -23,32 +23,32 @@
 
 <script>
 export default {
-    data() {
-        return {
-            search: "",
-        }
+  data () {
+    return {
+      search: ''
+    }
+  },
+  methods: {
+    getCards (filter) {
+      this.$store.dispatch('getCards', filter)
     },
-    methods: {
-        getCards(filter) {
-            this.$store.dispatch('getCards', filter);
-        },
-        getCard(id) {
-            this.$store.dispatch('getCard', id);
-        }
+    getCard (id) {
+      this.$store.dispatch('getCard', id)
+    }
+  },
+  mounted () {
+    this.getCards('')
+  },
+  computed: {
+    cardResults () {
+      console.log('Change!', this.$store.getters.cardResults)
+
+      return this.$store.getters.cardResults
     },
-    mounted() {
-        this.getCards('');
-    },
-    computed: {
-        cardResults() {
-            console.log('Change!', this.$store.getters.cardResults);
-            
-            return this.$store.getters.cardResults;
-        },
-        viewingCard() {
-            return this.$store.getters.viewingCard;
-        }
-    },
+    viewingCard () {
+      return this.$store.getters.viewingCard
+    }
+  }
 }
 </script>
 
@@ -75,7 +75,7 @@ export default {
         width: 50px;
         text-align: center;
         height: 60px;
-        line-height: 60px; 
+        line-height: 60px;
         border-top-left-radius: 35px;
         border-bottom-left-radius: 35px;
         color: dodgerblue;
@@ -124,5 +124,5 @@ export default {
         background-size: 401px auto !important;
         background-size: contain;
     }
-    
+
 </style>

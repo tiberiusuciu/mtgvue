@@ -46,12 +46,10 @@ export default {
         if (((this.mouseX - this.cardX) - 118) < -20) {
           rotateYAmt = -25
           shadowH = 17
-        }
-        else if (((this.mouseX - this.cardX) - 118) > 20) {
+        } else if (((this.mouseX - this.cardX) - 118) > 20) {
           rotateYAmt = 25
           shadowH = -17
-        }
-        else {
+        } else {
           rotateYAmt = 0
           shadowH = 0
         }
@@ -59,12 +57,10 @@ export default {
         if (((this.mouseY - this.cardY) - 50) > 20) {
           rotateXAmt = 25
           shadowV = -28
-        }
-        else if (((this.mouseY - this.cardY) - 50) < -20) {
+        } else if (((this.mouseY - this.cardY) - 50) < -20) {
           rotateXAmt = -25
           shadowV = 28
-        }
-        else {
+        } else {
           rotateXAmt = 0
           shadowV = 18
         }

@@ -21,17 +21,17 @@ export default {
   },
   methods: {
     addCard () {
-      this.$store.dispatch('onGetRandomCard', false);
+      this.$store.dispatch('onGetRandomCard', false)
     },
     mouseIsPressed () {
       console.log('we pressing!')
     }
   },
   computed: {
-    game() {
+    game () {
       return this.$store.getters.game
     }
-  },
+  }
 }
 </script>
 

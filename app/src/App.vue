@@ -5,13 +5,21 @@
         <div class="menu">
           <div v-if="user" class="profile-pic" :style="{'backgroundImage': `url(${user.profile_picture.core_fallbackLinks[0]})`}"></div>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/" class="first-item" exact>Home</router-link>
+          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/usersettings">Settings</router-link>
+          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/login">Login</router-link>
+          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/signup">Sign Up</router-link>
+          <router-link v-on:click.native="handleLogout" active-class="active-link" to="/login">Log Out</router-link>
+          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/game">Game</router-link>
+          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/cardsearch">Cards</router-link>
+          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/about">About</router-link>
+          <!-- <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/" class="first-item" exact>Home</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/usersettings" v-if="user">Settings</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/login" v-if="!user">Login</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/signup" v-if="!user">Sign Up</router-link>
           <router-link v-on:click.native="handleLogout" active-class="active-link" to="/login" v-if="user">Log Out</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/game" v-if="user">Game</router-link>
           <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/cardsearch" v-if="user">Cards</router-link>
-          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/about">About</router-link>
+          <router-link v-on:click.native="toggleMenu" active-class="active-link" to="/about">About</router-link> -->
         </div>
         <div class="shadow" @click="toggleMenu">
 
@@ -35,63 +43,62 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        menuInterval: "",
-        currentWidth: 0
+export default {
+  data () {
+    return {
+      menuInterval: '',
+      currentWidth: 0
+    }
+  },
+  methods: {
+    toggleMenu () {
+      // This animates the slide effect for the menu. This could be re-written using vuejs transitions perhaps
+      // give callbacks!
+      if (!this.showMenu) {
+        clearInterval(this.menuInterval)
+        this.currentWidth = 0
+        this.menuInterval = setInterval(() => {
+          var menu = document.querySelector('.menu')
+          if (menu) {
+            menu.style.width = this.currentWidth + 'px'
+          }
+          this.currentWidth += 6
+          if (this.currentWidth >= 300) {
+            clearInterval(this.menuInterval)
+          }
+        }, 60 / 1000)
+      } else {
+        clearInterval(this.menuInterval)
+        this.menuInterval = setInterval(() => {
+          var menu = document.querySelector('.menu')
+          if (menu) {
+            menu.style.width = this.currentWidth + 'px'
+          }
+          this.currentWidth = this.currentWidth - 2
+          if (this.currentWidth <= 150) {
+            clearInterval(this.menuInterval)
+          }
+        }, 60 / 1000)
       }
+      this.$store.dispatch('onToggleMenu')
     },
-    methods: {
-      toggleMenu() {
-        // This animates the slide effect for the menu. This could be re-written using vuejs transitions perhaps
-        // give callbacks!
-        if (!this.showMenu) {
-          clearInterval(this.menuInterval);
-          this.currentWidth = 0;
-          this.menuInterval = setInterval(() => {
-            var menu = document.querySelector('.menu');
-            if(menu) {
-              menu.style.width = this.currentWidth + 'px';
-            }
-            this.currentWidth += 6;
-            if (this.currentWidth >= 300) {
-              clearInterval(this.menuInterval);
-            }
-          }, 60 / 1000)
-        }
-        else {
-          clearInterval(this.menuInterval);
-          this.menuInterval = setInterval(() => {
-            var menu = document.querySelector('.menu');
-            if(menu) {
-              menu.style.width = this.currentWidth + 'px';
-            }
-              this.currentWidth = this.currentWidth - 2;
-            if (this.currentWidth <= 150) {
-              clearInterval(this.menuInterval);
-            }
-          }, 60 / 1000)
-        }
-        this.$store.dispatch('onToggleMenu');
-      },
-      handleLogout() {
-        this.toggleMenu();
-        this.$store.dispatch('logout');
-      }
+    handleLogout () {
+      this.toggleMenu()
+      this.$store.dispatch('logout')
+    }
+  },
+  computed: {
+    showMenu () {
+      return this.$store.getters.showMenu
     },
-    computed: {
-      showMenu() {
-        return this.$store.getters.showMenu
-      },
-      user() {
-        return this.$store.getters.user
-      }
-    },
-    created() {
-      this.$store.dispatch('tryAutoLogin')
-    },
+    user () {
+      return this.$store.getters.user
+    }
+  },
+  created () {
+    this.$store.dispatch('tryAutoLogin')
   }
+}
 </script>
 
 <style>
@@ -169,7 +176,6 @@ body {
   transition-property: line-height;
   transition-duration: .25s;
 }
-
 
 .burger-button:hover .burger-icon {
   line-height: 75px;
