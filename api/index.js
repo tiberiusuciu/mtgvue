@@ -5,6 +5,7 @@ var bodyParser = require('body-parser')
 var bcrypt = require('bcryptjs');
 const jwt  = require('jsonwebtoken');
 const cors = require('cors')
+const request = require('request');
 
 const app = express()
 
@@ -33,6 +34,7 @@ db.once('open', function() {
     app.get('/', (req, res) => {
         res.send('Hello World!')
     })
+
     app.get('/randomcard', (req, res) => {
         var Card = mongoose.model('Card', CardSchema);
 
@@ -43,10 +45,27 @@ db.once('open', function() {
 
             Card.findOne().skip(random).exec((err, card) => {
                 console.log("found this card!", card.name);
-                res.send(card);
+
+                const callback = (body) => {
+                    // console.log(body);
+                    console.log(body.image_uris.large);
+                    
+                    // card.imagery = body.image_uris.large;
+                    // console.log('card', card);
+                    
+                    res.send({...card, imagery: body.image_uris.large});
+                }
+
+                request(`https://api.scryfall.com/cards/${card.scryfallId}`, { json: true }, (err, res, body) => {
+                    if (err) { return console.log(err); }
+                    // console.log(body.url);
+                    // console.log(body.explanation);
+                    callback(body);
+                });
             })
         });
     })
+
     app.post('/user', (req, res) => {
         var User = mongoose.model('User', UserSchema);
         var Card = mongoose.model('Card', CardSchema);
@@ -486,6 +505,7 @@ db.once('open', function() {
             console.log('filter', req.query.filter);
             
             console.log('cards', cards.length);
+            console.log('looking for a card');
             
             res.send(cards[0]);
         })
