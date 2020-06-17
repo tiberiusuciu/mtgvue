@@ -15,6 +15,7 @@ var UserSchema = require('./Schemas/User');
 const storedCredentials = require('./Untracked/credentials');
 console.log(storedCredentials);
 
+app.use(express.static('images'))
 
 app.use(cors({credentials: true, origin: true}))
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -45,23 +46,7 @@ db.once('open', function() {
 
             Card.findOne().skip(random).exec((err, card) => {
                 console.log("found this card!", card.name);
-
-                const callback = (body) => {
-                    // console.log(body);
-                    console.log(body.image_uris.large);
-                    
-                    // card.imagery = body.image_uris.large;
-                    // console.log('card', card);
-                    
-                    res.send({...card, imagery: body.image_uris.large});
-                }
-
-                request(`https://api.scryfall.com/cards/${card.scryfallId}`, { json: true }, (err, res, body) => {
-                    if (err) { return console.log(err); }
-                    // console.log(body.url);
-                    // console.log(body.explanation);
-                    callback(body);
-                });
+                res.send(card);
             })
         });
     })

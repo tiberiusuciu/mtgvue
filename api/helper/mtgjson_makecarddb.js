@@ -38,7 +38,7 @@ db.once('open', function() {
         var i = 0;
         function myLoop() {
             setTimeout(function() {
-                console.log(`Set #${i} ${mtgjson[keyTables[i]].name} (${keyTables[i]}`);
+                console.log(`Set #${i} ${mtgjson[keyTables[i]].name} (${keyTables[i]})`);
                 console.log('Card count:', mtgjson[keyTables[i]].cards.length, 'cards');
                 
                 var j = 0;
@@ -146,6 +146,7 @@ db.once('open', function() {
                         }
                     }, timing)
                 }
+
                 myInnerLoop();
             }, timing)
         }

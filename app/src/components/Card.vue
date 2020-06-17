@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'zoom': !isPressed, 'card': true}" :id="'card'+cardId" :style="{backgroundImage: 'url('+card.imagery+')'}" @mousedown="mouseIsPressed" @mouseup="mouseIsReleased()">
+  <div :class="{'zoom': !isPressed, 'card': true}" :id="'card'+cardId" :style="{backgroundImage: 'url(http://localhost:3000/cards/'+card._id+'.png)'}" @mousedown="mouseIsPressed" @mouseup="mouseIsReleased()">
     <!-- this is card -->
   </div>
 </template>
