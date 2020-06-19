@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'zoom': !isPressed, 'card': true}" :id="'card'+cardId" :style="{backgroundImage: 'url(http://localhost:3000/cards/'+card._id+'.png)'}" @mousedown="mouseIsPressed" @mouseup="mouseIsReleased()">
+  <div :class="{'zoom': !isPressed, 'card': true}" :id="'card'+cardId" :style="{backgroundImage: 'url(http://localhost:3000/cards/'+card._id+'.png)'}" @mousedown="mouseIsPressed" @mouseup="(e) => mouseIsReleased(e)">
     <!-- this is card -->
   </div>
 </template>
@@ -19,6 +19,9 @@ export default {
   props: ['card', 'cardId'],
   methods: {
     mouseIsPressed (e) {
+
+      this.$store.dispatch('onHoldingCard', this.card)
+
       this.isPressed = true
       this.cardX = e.clientX - 118
       this.cardY = e.clientY - 50
@@ -27,10 +30,6 @@ export default {
       window.addEventListener('mousemove', (e) => {
         this.mouseX = e.clientX
         this.mouseY = e.clientY
-      })
-
-      window.addEventListener('mouseup', (e) => {
-        this.mouseIsReleased()
       })
 
       this.interval = setInterval(() => {
@@ -72,7 +71,7 @@ export default {
         this.$el.style.top = this.cardY + 'px'
       }, 60 / 1000)
     },
-    mouseIsReleased () {
+    mouseIsReleased (e) {
       clearInterval(this.interval)
       this.$el.style.position = 'relative'
       this.$el.style.left = 'inherit'

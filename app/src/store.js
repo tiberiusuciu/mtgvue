@@ -18,7 +18,8 @@ export default new Vuex.Store({
       },
       opponents: [],
       chat: [],
-      spectators: []
+      spectators: [],
+      holdingCard: undefined
     },
     requests: {
       requestSent: false,
@@ -58,6 +59,19 @@ export default new Vuex.Store({
     },
     cardSearchViewCard (state, card) {
       state.viewingCard = card
+    },
+    removeCardFromHand (state) {
+      const newHand = state.game.player.hand.filter((card) => {
+        return card._id != state.game.holdingCard._id
+      })
+      state.game.holdingCard = undefined;
+      state.game.player.hand = newHand;
+    },
+    addCardToBattlefield (state, card) {
+      state.holdingCard = card
+    },
+    holdCard (state, card) {
+      state.game.holdingCard = card
     }
   },
   actions: {
@@ -295,6 +309,13 @@ export default new Vuex.Store({
         console.log('res', res.data)
         commit('cardSearchViewCard', res.data)
       }).catch(error => console.log(error))
+    },
+    onPlayCard ({ commit }) {
+      commit('removeCardFromHand')
+      commit('addCardToBattlefield')
+    },
+    onHoldingCard ({ commit }, card) {
+      commit('holdCard', card)
     }
   },
   getters: {
@@ -318,6 +339,9 @@ export default new Vuex.Store({
     },
     viewingCard (state) {
       return state.viewingCard
+    },
+    holdingCard (state) {
+      return state.game.holdingCard
     }
   }
 })

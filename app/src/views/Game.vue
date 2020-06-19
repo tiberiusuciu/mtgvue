@@ -1,11 +1,11 @@
 <template>
-  <div id="app">
+  <div id="app" @mouseup="(e) => onMouseUp(e)">
     <div class="button" @click="addCard()">
       Card
     </div>
     <div class="hand">
       <template v-for="(card, index) in this.game.player.hand">
-        <Card :card='card' :cardId="index" :key="index" @mousedown="mouseIsPressed()"></Card>
+        <Card :card='card' :cardId="card._id" :key="index" @mousedown="mouseIsPressed()"></Card>
       </template>
     </div>
   </div>
@@ -25,6 +25,15 @@ export default {
     },
     mouseIsPressed () {
       console.log('we pressing!')
+    },
+    onMouseUp (e) {
+      console.log('MOUSE UP')
+
+      // 166 is height of hand and added a buffer
+      if (this.$store.getters.holdingCard && e.y < window.innerHeight - 166 - 100) {
+        console.log('Playing card...')
+        this.$store.dispatch('onPlayCard')
+      }
     }
   },
   computed: {
@@ -56,6 +65,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  height: 100vh;
+  padding-top: 300px;
 }
 .hand {
   position: absolute;
@@ -91,7 +102,7 @@ body {
   /* border-bottom: 5px solid dodgerblue; */
   transition: background-color .15s ease-in-out;
   margin: auto;
-  margin-top: 300px;
+  /* margin-top: 300px; */
   cursor: pointer;
 }
 .button:hover {
