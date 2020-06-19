@@ -61,7 +61,7 @@ I took the time to create some helper scripts in order to make the process a lot
 For starters, open up MongoDB in a terminal or with [Compass](https://www.mongodb.com/products/compass) and create a new database (I named mine **mtgdb**).
 Also, Create a collection within **mtgdb** called **cards** (this is where all the cards of MTG will be stored)
 
-Great, your DB is ready to be populated! In a terminal, head over to the root of the project and run the following
+Great, your DB is ready to be populated! In a terminal, head over to the root of the project and run the following ⚠ This command will take a lot of time since I am scraping scryfall to acquire all card images. Eventually, card image scraping should be done in a separate command
 ```sh
 $ cd mtgvue/api/helper
 $ node mtgjson_makecarddb.js <relative path to your AllSets.json>
